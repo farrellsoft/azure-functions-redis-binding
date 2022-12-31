@@ -25,4 +25,4 @@ jobs:
       - name: Publish
         run: |
           dotnet nuget add source --username xximjasonxx --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name farrellsoft "https://nuget.pkg.github.com/farrellsoft/index.json"
-          dotnet nuget push "bin/Debug/Farrellsoft.Azure.Functions.Extensions.Redis.${{ github.event.inputs.version }}.nupkg"  --api-key ${{ secrets.GITHUB_TOKEN }} --source "farrellsoft"
+          dotnet nuget push "artifact/Farrellsoft.Azure.Functions.Extensions.Redis.${{ github.event.inputs.version }}.nupkg"  --api-key ${{ secrets.GITHUB_TOKEN }} --source "farrellsoft"

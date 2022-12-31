@@ -6,9 +6,6 @@ on:
         description: The version to associate with the release
         required: true
 
-permissions:
-  packages: write
-
 jobs:
   publish:
     name: Publish

@@ -24,7 +24,7 @@ jobs:
           dotnet-version: 6.0.x
 
       - name: Pack
-        run: dotnet pack -c Debug /p:Version=${{ github.event.inputs.version }}
+        run: dotnet pack -c Debug --output "./" /p:Version=${{ github.event.inputs.version }}
 
       - name: Publish
         run: |

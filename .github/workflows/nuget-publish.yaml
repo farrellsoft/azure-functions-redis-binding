@@ -1,0 +1,29 @@
+name: Redis Binding NuGet Publish
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The version to associate with the release
+        required: true
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+
+      - name: Install .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Pack
+        run: dotnet pack -c Release --output "./" /p:Version=${{ github.event.inputs.version }}
+
+      - name: Publish
+        run: |
+          dotnet nuget push "Farrellsoft.Azure.Functions.Extensions.Redis.${{ github.event.inputs.version }}.nupkg" \
+            --api-key ${{ secrets.NUGET_TOKEN }} \
+            --source https://api.nuget.org/v3/index.json

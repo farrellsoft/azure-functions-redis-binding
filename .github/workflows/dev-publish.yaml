@@ -1,4 +1,4 @@
-name: Azure Function Redis Binding Dev
+name: Redis Binding Dev Publish
 on:
   workflow_dispatch:
     inputs:

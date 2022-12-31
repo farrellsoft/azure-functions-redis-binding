@@ -6,10 +6,6 @@ on:
         description: The version to associate with the release
         required: true
 
-permissions:
-  packages: write
-  contents: read
-
 jobs:
   publish:
     name: Publish
@@ -28,8 +24,6 @@ jobs:
 
       - name: Publish
         run: |
+          dotnet nuget add source --username xximjasonxx --password ${{ secrets.PAT_TOKEN }} --store-password-in-clear-text --name farrellsoft "https://nuget.pkg.github.com/farrellsoft/index.json"
           dotnet nuget push "Farrellsoft.Azure.Functions.Extensions.Redis.${{ github.event.inputs.version }}.nupkg"  \
-            --api-key ${GITHUB_TOKEN} \
-            --source "https://nuget.pkg.github.com/farrellsoft/index.json"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            --source "farrellsoft"

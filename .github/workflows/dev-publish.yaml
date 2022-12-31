@@ -6,6 +6,10 @@ on:
         description: The version to associate with the release
         required: true
 
+permissions:
+  packages: write
+  contents: read
+
 jobs:
   publish:
     name: Publish
@@ -20,10 +24,12 @@ jobs:
           dotnet-version: 6.0.x
 
       - name: Pack
-        run: dotnet pack -c Debug -o ./artifact /p:Version=${{ github.event.inputs.version }}
+        run: dotnet pack -c Debug /p:Version=${{ github.event.inputs.version }}
 
       - name: Publish
         run: |
-          dotnet nuget push "artifact/Farrellsoft.Azure.Functions.Extensions.Redis.${{ github.event.inputs.version }}.nupkg"  \
-            --api-key ${{ secrets.GITHUB_TOKEN }} \
-            --source ""https://nuget.pkg.github.com/farrellsoft/index.json""
+          dotnet nuget push "Farrellsoft.Azure.Functions.Extensions.Redis.${{ github.event.inputs.version }}.nupkg"  \
+            --api-key ${GITHUB_TOKEN} \
+            --source "https://nuget.pkg.github.com/farrellsoft/index.json"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

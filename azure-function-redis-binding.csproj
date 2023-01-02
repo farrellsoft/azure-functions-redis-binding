@@ -11,7 +11,7 @@
   <PropertyGroup>
     <Authors>xximjasonxx</Authors>
     <Company>Farrellsoft</Company>
-    <RepositoryUrl>https://github.com/Farrellsoft/azure-functions-redis-binding</RepositoryUrl>
+    <RepositoryUrl>https://github.com/farrellsoft/azure-functions-redis-binding</RepositoryUrl>
     <PackageReadmeFile>Readme.md</PackageReadmeFile>
   </PropertyGroup>
 

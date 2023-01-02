@@ -17,10 +17,4 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
             Key = key;
         }
     }
-
-    public enum ValueType
-    {
-        Single,
-        Collection
-    }
 }

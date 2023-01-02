@@ -30,6 +30,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
 
     public enum RedisValueType
     {
+        None,
         Single,
         Collection
     }

@@ -3,15 +3,15 @@ using StackExchange.Redis;
 
 namespace Farrellsoft.Azure.Functions.Extensions.Redis.Builders
 {
-    internal class RedisCollectorBuilder : IConverter<RedisAttribute, IAsyncCollector<RedisItem>>
+    internal class RedisCollectorBuilder<TValue> : IConverter<RedisAttribute, IAsyncCollector<TValue>>
     {
-        public IAsyncCollector<RedisItem> Convert(RedisAttribute input)
+        public IAsyncCollector<TValue> Convert(RedisAttribute input)
         {
-            return new RedisItemAsyncCollector(input.Key, input.Connection);
+            return new RedisItemAsyncCollector<TValue>(input.Key, input.Connection);
         }
     }
 
-    internal class RedisItemAsyncCollector : IAsyncCollector<RedisItem>
+    internal class RedisItemAsyncCollector<TValue> : IAsyncCollector<TValue>
     {
         private readonly string _key;
         private readonly string _connection;
@@ -19,15 +19,18 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Builders
         public RedisItemAsyncCollector(string key, string connection)
         {
             _key = key;
+            if (string.IsNullOrWhiteSpace(connection))
+                throw new ArgumentNullException(nameof(connection));
+
             _connection = connection;
         }
 
-        public async Task AddAsync(RedisItem item, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task AddAsync(TValue item, CancellationToken cancellationToken = default(CancellationToken))
         {
             using var connection = ConnectionMultiplexer.Connect(_connection);
             var db = connection.GetDatabase();
 
-            await db.StringSetAsync(_key, item.Value);
+            
         }
 
         public Task FlushAsync(CancellationToken cancellationToken = default(CancellationToken))

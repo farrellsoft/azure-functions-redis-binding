@@ -19,7 +19,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
                 .BindToInput<DocumentOpenType>(typeof(RedisItemBuilder<>));
 
             bindingRule
-                .BindToCollector<ICollection<RedisItem>>(typeof(RedisCollectorBuilder));
+                .BindToCollector<DocumentOpenType>(typeof(RedisCollectorBuilder<>));
         }
 
         private class DocumentOpenType : OpenType.Poco

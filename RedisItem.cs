@@ -1,8 +1,7 @@
 namespace Farrellsoft.Azure.Functions.Extensions.Redis
 {
-    public class RedisItem
+    public class RedisItem<TValue>
     {
-        public string Key { get; set; }
-        public string Value { get; set; }        
+        public TValue Value { get; set; }        
     }
 }

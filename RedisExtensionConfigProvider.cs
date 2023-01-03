@@ -13,14 +13,15 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
         {
             var bindingRule = context.AddBindingRule<RedisAttribute>();
             bindingRule.AddValidator(ValidateAttribute);
+
+            bindingRule
+                .BindToCollector<DocumentOpenType>(typeof(RedisCollectorBuilder<>));
+
             bindingRule
                 .BindToInput<List<DocumentOpenType>>(typeof(RedisEnumerableBuilder<>));
 
             bindingRule
                 .BindToInput<DocumentOpenType>(typeof(RedisItemBuilder<>));
-
-            bindingRule
-                .BindToCollector<DocumentOpenType>(typeof(RedisCollectorBuilder<>));
         }
 
         private void ValidateAttribute(RedisAttribute attribute, Type type)

@@ -19,3 +19,4 @@ jobs:
 
       - name: Pack
         run: dotnet pack -c Release --output "./" /p:Version=0.0.1
+        working-directory: azure-function-redis-binding

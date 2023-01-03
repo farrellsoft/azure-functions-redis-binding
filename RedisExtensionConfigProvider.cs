@@ -12,6 +12,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
         public void Initialize(ExtensionConfigContext context)
         {
             var bindingRule = context.AddBindingRule<RedisAttribute>();
+            bindingRule.AddValidator(ValidateAttribute);
             bindingRule
                 .BindToInput<List<DocumentOpenType>>(typeof(RedisEnumerableBuilder<>));
 
@@ -20,6 +21,15 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
 
             bindingRule
                 .BindToCollector<DocumentOpenType>(typeof(RedisCollectorBuilder<>));
+        }
+
+        private void ValidateAttribute(RedisAttribute attribute, Type type)
+        {
+            if (string.IsNullOrEmpty(attribute.Connection))
+                throw new InvalidOperationException($"{nameof(RedisAttribute.Connection)} cannot be empty");
+
+            if (string.IsNullOrEmpty(attribute.Key))
+                throw new InvalidOperationException($"{nameof(RedisAttribute.Key)} cannot be empty");
         }
 
         private class DocumentOpenType : OpenType.Poco

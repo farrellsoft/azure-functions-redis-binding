@@ -39,10 +39,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Builders
             var db = connection.GetDatabase();
 
             // need to determine if the underlying type is a string or list
-            if (_valueType == RedisValueType.Single)
-            {
-                await db.StringSetAsync(_key, item.ToString());
-            }            
+            await db.StringSetAsync(_key, item.ToString());            
         }
 
         public Task FlushAsync(CancellationToken cancellationToken = default(CancellationToken))

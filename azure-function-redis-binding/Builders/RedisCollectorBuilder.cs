@@ -1,4 +1,5 @@
 using Microsoft.Azure.WebJobs;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 
 namespace Farrellsoft.Azure.Functions.Extensions.Redis.Builders
@@ -39,7 +40,21 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Builders
             var db = connection.GetDatabase();
 
             // need to determine if the underlying type is a string or list
-            await db.StringSetAsync(_key, item.ToString());            
+            if (_valueType == RedisValueType.Single)
+            {
+                await db.StringSetAsync(_key, item.ToString());
+            }
+
+            if (_valueType == RedisValueType.Collection)
+            {
+                var valueToInsert = item.ToString();
+                if (typeof(TValue).IsClass)
+                {
+                    valueToInsert = JsonConvert.SerializeObject(item);
+                }
+
+                await db.ListRightPushAsync(_key, valueToInsert);
+            }
         }
 
         public Task FlushAsync(CancellationToken cancellationToken = default(CancellationToken))

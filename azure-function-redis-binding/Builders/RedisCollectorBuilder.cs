@@ -47,13 +47,26 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Builders
 
             if (_valueType == RedisValueType.Collection)
             {
-                var valueToInsert = item.ToString();
+                await SaveCollectionItem(item, db);
+            }
+        }
+
+        async Task SaveCollectionItem(TValue item, IDatabase database)
+        {
+            if (item is IRedisListItem)
+            {
+
+            }
+            else
+            {
                 if (typeof(TValue).IsClass)
                 {
-                    valueToInsert = JsonConvert.SerializeObject(item);
+                    await database.ListRightPushAsync(_key, JsonConvert.SerializeObject(item));
                 }
-
-                await db.ListRightPushAsync(_key, valueToInsert);
+                else
+                {
+                    await database.ListRightPushAsync(_key, item.ToString());
+                }
             }
         }
 

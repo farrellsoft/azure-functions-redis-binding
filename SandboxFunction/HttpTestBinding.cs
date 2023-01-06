@@ -19,9 +19,9 @@ namespace Sandbox
             [Redis(key: "list1", valueType: RedisValueType.Collection, Connection = "RedisConnectionString")] ICollector<Person> values,
             ILogger log)
         {
-            values.Add(new Person { Name = "Jason" });
-            values.Add(new Person { Name = "Claire" });
-            values.Add(new Person { Name = "Ethan" });
+            values.Add(new Person { Id = "1", Name = "Jason2" });
+            values.Add(new Person { Id = "2", Name = "Claire3" });
+            values.Add(new Person { Id = "3", Name = "Ethan" });
 
             //return new OkObjectResult(String.Join(",", values));
             return new OkObjectResult("done");

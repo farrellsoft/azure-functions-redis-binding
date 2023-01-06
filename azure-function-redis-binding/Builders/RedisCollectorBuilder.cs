@@ -55,7 +55,28 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Builders
         {
             if (item is IRedisListItem)
             {
+                // get all list items for the key
+                var listItemsRaw = await database.ListRangeAsync(_key);
 
+                // build the raw list into objects (or strings)
+                var listItems = listItemsRaw.Select((x, index) => new
+                {
+                    Index = index,
+                    Value = JsonConvert.DeserializeObject<TValue>(x)
+                }).ToList();
+
+                // attempt to find the item based on its given id
+                var incomingValueAsListItem = (IRedisListItem)item;
+                var foundItem = listItems.FirstOrDefault(x => ((IRedisListItem)x.Value).Id == incomingValueAsListItem.Id);
+                if (foundItem != null)
+                {
+                    await database.ListSetByIndexAsync(_key, foundItem.Index, JsonConvert.SerializeObject(item));
+                }
+                else
+                {
+                    // the item was not found by its id - insert it
+                    await database.ListRightPushAsync(_key, JsonConvert.SerializeObject(item));
+                }
             }
             else
             {

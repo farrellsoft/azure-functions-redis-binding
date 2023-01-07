@@ -15,16 +15,14 @@ namespace Sandbox
     {
         [FunctionName("TestSandbox")]
         public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "test")] HttpRequest req,
-            [Redis(key: "list1", valueType: RedisValueType.Collection, Connection = "RedisConnectionString")] ICollector<Person> values,
-            ILogger log)
+            [Redis(key: "values", valueType: RedisValueType.Collection, Connection = "RedisConnectionString")] ICollector<Person> values)
         {
-            values.Add(new Person { Id = "1", Name = "Jason2" });
-            values.Add(new Person { Id = "2", Name = "Claire3" });
-            values.Add(new Person { Id = "3", Name = "Ethan" });
 
-            //return new OkObjectResult(String.Join(",", values));
-            return new OkObjectResult("done");
+            values.Add(new Person { Name = "Name 1" });
+
+
+
+            return null;
         }
     }
 }

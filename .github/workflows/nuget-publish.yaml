@@ -23,7 +23,7 @@ jobs:
 
       - name: Publish
         run: |
-          dotnet nuget push "Farrellsoft.Azure.Functions.Extensions.Redis.${{ github.ref_name }}.nupkg" -\
-            -api-key ${{ secrets.NUGET_TOKEN }} \
+          dotnet nuget push "Farrellsoft.Azure.Functions.Extensions.Redis.${{ github.ref_name }}.nupkg" \
+            --api-key ${{ secrets.NUGET_TOKEN }} \
             --source https://api.nuget.org/v3/index.json
         working-directory: azure-function-redis-binding

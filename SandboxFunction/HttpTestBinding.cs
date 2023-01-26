@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Farrellsoft.Azure.Functions.Extensions.Redis;
+using System.Collections.Generic;
 
 namespace Sandbox
 {
@@ -15,14 +16,12 @@ namespace Sandbox
     {
         [FunctionName("TestSandbox")]
         public async Task<IActionResult> Run(
-            [Redis(key: "values", valueType: RedisValueType.Collection, Connection = "RedisConnectionString")] ICollector<Person> values)
+            [Redis(key: "brothers", Connection = "RedisConnectionString")] Dictionary<string, string> values)
         {
 
-            values.Add(new Person { Name = "Name 1" });
+            var valueString = string.Join(",", values.Values);
 
-
-
-            return null;
+            return new OkObjectResult(valueString);
         }
     }
 }

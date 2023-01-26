@@ -21,6 +21,9 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
                 .BindToInput<List<DocumentOpenType>>(typeof(RedisEnumerableBuilder<>));
 
             bindingRule
+                .BindToInput<Dictionary<string, DocumentOpenType>>(typeof(RedisDictionaryBuilder<>));
+
+            bindingRule
                 .BindToInput<DocumentOpenType>(typeof(RedisItemBuilder<>));
         }
 

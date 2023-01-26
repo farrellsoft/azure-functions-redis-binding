@@ -16,6 +16,7 @@ namespace Sandbox
     {
         [FunctionName("TestSandbox")]
         public async Task<IActionResult> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "test")] HttpRequest request,
             [Redis(key: "brothers", Connection = "RedisConnectionString")] Dictionary<string, string> values)
         {
 

@@ -4,7 +4,7 @@ using StackExchange.Redis;
 
 namespace Farrellsoft.Azure.Functions.Extensions.Redis.Builders
 {
-    public class RedisEnumerableBuilder<TValue> : IAsyncConverter<RedisAttribute, List<TValue>>
+    internal class RedisEnumerableBuilder<TValue> : IAsyncConverter<RedisAttribute, List<TValue>>
     {
         public async Task<List<TValue>> ConvertAsync(RedisAttribute input, CancellationToken cancellationToken)
         {

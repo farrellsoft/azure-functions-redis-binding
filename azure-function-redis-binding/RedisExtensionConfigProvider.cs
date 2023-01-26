@@ -18,10 +18,10 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
                 .BindToCollector<DocumentOpenType>(typeof(RedisCollectorBuilder<>));
 
             bindingRule
-                .BindToInput<List<DocumentOpenType>>(typeof(RedisEnumerableBuilder<>));
+                .BindToInput<Dictionary<string, string>>(typeof(RedisStringDictionaryBuilder<string>));
 
             bindingRule
-                .BindToInput<Dictionary<string, DocumentOpenType>>(typeof(RedisDictionaryBuilder<>));
+                .BindToInput<List<DocumentOpenType>>(typeof(RedisEnumerableBuilder<>));
 
             bindingRule
                 .BindToInput<DocumentOpenType>(typeof(RedisItemBuilder<>));

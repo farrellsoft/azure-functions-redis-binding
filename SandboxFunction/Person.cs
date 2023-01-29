@@ -4,7 +4,8 @@ namespace Sandbox
 {
     public class Person : IRedisListItem
     {
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+        public string Last { get; set; }
         public string Id { get; set; }
     }
 }

@@ -155,5 +155,17 @@ public async Task<IActionResult> Run(
 }
 ```
 
+#### Code Example: Retrieve a HashMap from Redis based on a key (v1.2+)
+This can be done with either <strong>Dictionary&lt;string, TValue&gt; or Dictionary&lt;string, string&gt;
+```
+public async Task<IActionResult> Run(
+  [RedisHash(key: "brothers", Connection = "RedisConnectionString")] Dictionary<string, Person> values)
+{
+  var valueString = string.Join(",", values.Values);
+
+  return new OkObjectResult(valueString);
+}
+```
+
 ## Support
 Feel free to contact me on Twitter (@jfarrell) or Mastodon (https://hachyderm.io/@jfarrell) with any questions or feature requests. As time goes on, I intend to create more process around asks.

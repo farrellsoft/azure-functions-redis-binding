@@ -4,26 +4,24 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 
-namespace Farrellsoft.Azure.Functions.Extensions.Redis.Builders
+namespace Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders
 {
-	public class ObjectHashMapValueProvider<TValue> : IValueProvider
+	internal class RedisHashMapValueProvider<TValue> : IValueProvider
 	{
         private readonly string _connection;
         private readonly string _key;
 
-        public ObjectHashMapValueProvider(string connectionName, string key, IConfiguration confiuguration)
-        {
+        public RedisHashMapValueProvider(string connectionName, string key, IConfiguration configuration)
+		{
             if (connectionName == null)
                 throw new ArgumentNullException("You must specify the name of the connection in settings");
 
-            _connection = confiuguration.GetValue<string>(connectionName);
+            _connection = configuration.GetValue<string>(connectionName);
             if (_connection == null)
                 throw new ArgumentNullException($"The settings value {connectionName} was not found");
 
             _key = key;
         }
-
-        public Type Type => typeof(TValue);
 
         public async Task<object> GetValueAsync()
         {
@@ -38,12 +36,29 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Builders
 
             for (int idx = 0; idx < resultNames.Length; idx++)
             {
-                returnDictionary.Add(resultNames[idx], JsonConvert.DeserializeObject<TValue>(resultValues[idx]));
+                if (typeof(TValue) != typeof(string))
+                {
+                    returnDictionary.Add(resultNames[idx], JsonConvert.DeserializeObject<TValue>(resultValues[idx].ToString()));
+                }
+                else
+                {
+                    returnDictionary.Add(resultNames[idx], (TValue)(object)resultValues[idx].ToString());
+                }
             }
 
             return returnDictionary;
         }
 
+        public Type Type
+        {
+            get
+            {
+                var dictionaryType = typeof(Dictionary<,>);
+                var genericType = dictionaryType.MakeGenericType(new[] { typeof(string), typeof(TValue) });
+
+                return genericType;
+            }
+        }
         public string ToInvokeString() => string.Empty;
     }
 }

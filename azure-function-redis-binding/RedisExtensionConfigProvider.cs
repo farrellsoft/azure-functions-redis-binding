@@ -25,18 +25,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
             bindingRule
                 .BindToCollector<DocumentOpenType>(typeof(RedisCollectorBuilder<>));
 
-            /*bindingRule
-                .BindToInput<Dictionary<string, string>>(typeof(RedisStringDictionaryBuilder<string>));*/
-
-            bindingRule
-                .BindToInput<List<DocumentOpenType>>(typeof(RedisEnumerableBuilder<>));
-
-            bindingRule
-                .BindToInput<DocumentOpenType>(typeof(RedisItemBuilder<>));
-
-            var hashMapBindingRule = context.AddBindingRule<RedisHashAttribute>();
-            hashMapBindingRule.AddValidator(ValidateAttribute);
-            hashMapBindingRule.Bind(new HashMapBindingProvider(_configuration));
+            bindingRule.Bind(new RedisBindingProvider(_configuration));
         }
 
         private void ValidateAttribute(IRedisAttribute attribute, Type type)

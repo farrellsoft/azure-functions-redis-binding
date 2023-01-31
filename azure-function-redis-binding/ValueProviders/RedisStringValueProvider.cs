@@ -6,12 +6,12 @@ using StackExchange.Redis;
 
 namespace Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders
 {
-	internal class StringValueProvider : IValueProvider
+	internal class RedisStringValueProvider : IValueProvider
 	{
         private readonly string _connection;
         private readonly string _key;
 
-		public StringValueProvider(string connectionName, string key, IConfiguration configuration)
+		public RedisStringValueProvider(string connectionName, string key, IConfiguration configuration)
 		{
             if (connectionName == null)
                 throw new ArgumentNullException("You must specify the name of the connection in settings");

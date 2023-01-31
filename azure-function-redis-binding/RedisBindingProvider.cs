@@ -23,8 +23,14 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
         {
             var attribute = context.Parameter.GetCustomAttribute<RedisAttribute>(inherit: false);
             var genericArgs = context.Parameter.ParameterType.GetGenericArguments();
+
+            // we are dealing with a string
             if (genericArgs.Length == 0)
-                return Task.FromResult<IBinding>(new RedisStringBinding(attribute, _configuration));
+            {
+                // todo: validate we are dealing with a string or T
+
+                return Task.FromResult<IBinding>(new RedisItemBinding(attribute, _configuration, context.Parameter.ParameterType));
+            }
 
             // we are dealing with a destination type generic with one arg, it needs to be a list
             if (genericArgs.Length == 1)

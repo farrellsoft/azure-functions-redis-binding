@@ -28,7 +28,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Bindings
                 _configuration));
 
 
-            return Task.FromResult<IValueProvider>(new StringValueProvider(_attribute.Connection, _attribute.Key, _configuration));
+            return Task.FromResult<IValueProvider>(new RedisStringValueProvider(_attribute.Connection, _attribute.Key, _configuration));
         }
 
         public Task<IValueProvider> BindAsync(BindingContext context) => throw new NotImplementedException();

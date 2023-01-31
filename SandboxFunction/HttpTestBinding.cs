@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Farrellsoft.Azure.Functions.Extensions.Redis;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Sandbox
 {
@@ -17,8 +19,10 @@ namespace Sandbox
         [FunctionName("TestSandbox")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "test")] HttpRequest request,
-        {
-            return new OkObjectResult("empty");
+            [Redis("brothers", Connection = "RedisConnectionString")] Dictionary<string, Person> values)
+        {   
+            var strings = values.Select(x => $"age: {x.Key} name: {x.Value.FirstName}");
+            return new OkObjectResult(String.Join(",", strings));
         }
     }
 }

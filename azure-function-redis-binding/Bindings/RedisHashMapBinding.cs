@@ -17,10 +17,10 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Bindings
             _configuration = configuration;
 		}
 
-        public Task<IValueProvider> BindAsync(object value, ValueBindingContext context)
+        public Task<IValueProvider> BindAsync(BindingContext context)
         {
             var providerType = typeof(RedisHashMapValueProvider<>);
-            var constructedProvider = providerType.MakeGenericType(new[] { typeof(string), typeof(TValue) });
+            var constructedProvider = providerType.MakeGenericType(new[] { typeof(TValue) });
             return Task.FromResult<IValueProvider>((IValueProvider)Activator.CreateInstance(
                 type: constructedProvider,
                 _attribute.Connection,
@@ -28,8 +28,8 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Bindings
                 _configuration));
         }
 
-        public Task<IValueProvider> BindAsync(BindingContext context) => throw new NotImplementedException();
         public bool FromAttribute => false;
+        public Task<IValueProvider> BindAsync(object value, ValueBindingContext context) => throw new NotImplementedException();
         public ParameterDescriptor ToParameterDescriptor() => new ParameterDescriptor
         {
             Name = "HashMapParam",

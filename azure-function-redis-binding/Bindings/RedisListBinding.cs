@@ -17,7 +17,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Bindings
             _configuration = configuration;
 		}
 
-        public Task<IValueProvider> BindAsync(object value, ValueBindingContext context)
+        public Task<IValueProvider> BindAsync(BindingContext context)
         {
             var providerType = typeof(RedisListValueProvider<>);
             var constructedProvider = providerType.MakeGenericType(new[] { typeof(TValue) });
@@ -31,9 +31,8 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Bindings
             return Task.FromResult<IValueProvider>(new RedisStringValueProvider(_attribute.Connection, _attribute.Key, _configuration));
         }
 
-        public Task<IValueProvider> BindAsync(BindingContext context) => throw new NotImplementedException();
         public bool FromAttribute => false;
-
+        public Task<IValueProvider> BindAsync(object value, ValueBindingContext context) => throw new NotImplementedException();
         public ParameterDescriptor ToParameterDescriptor() => new ParameterDescriptor
         {
             Name = "ListParam",

@@ -34,7 +34,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders
         }
 
         public Type Type => typeof(TValue);
-        public string ToInvokeString() => throw new NotImplementedException();
+        public string ToInvokeString() => string.Empty;
     }
 }
 

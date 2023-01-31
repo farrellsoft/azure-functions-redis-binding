@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Farrellsoft.Azure.Functions.Extensions.Redis.Bindings
 {
-	public class RedisHashMapBinding<TValue> : IBinding
+	internal class RedisHashMapBinding<TValue> : IBinding
 	{
         private readonly RedisAttribute _attribute;
         private readonly IConfiguration _configuration;

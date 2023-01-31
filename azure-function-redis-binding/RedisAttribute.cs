@@ -4,7 +4,7 @@ using Microsoft.Azure.WebJobs.Description;
 namespace Farrellsoft.Azure.Functions.Extensions.Redis
 {
     [Binding]
-    public class RedisAttribute : Attribute, IRedisAttribute
+    public class RedisAttribute : Attribute
     {
         [AutoResolve]
         public string Key { get; private set; }   

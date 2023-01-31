@@ -28,7 +28,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
             bindingRule.Bind(new RedisBindingProvider(_configuration));
         }
 
-        private void ValidateAttribute(IRedisAttribute attribute, Type type)
+        private void ValidateAttribute(RedisAttribute attribute, Type type)
         {
             if (string.IsNullOrEmpty(attribute.Connection))
                 throw new InvalidOperationException($"{nameof(RedisAttribute.Connection)} cannot be empty");

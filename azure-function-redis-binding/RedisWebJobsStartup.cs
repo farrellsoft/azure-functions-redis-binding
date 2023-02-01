@@ -19,6 +19,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
         public static IWebJobsBuilder AddRedis(this IWebJobsBuilder builder)
         {
             builder.AddExtension<RedisExtensionConfigProvider>();
+
             return builder;
         }
     }

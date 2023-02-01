@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Reflection.Metadata;
 using Farrellsoft.Azure.Functions.Extensions.Redis.Bindings;
 using Farrellsoft.Azure.Functions.Extensions.Redis.Builders;
+using Farrellsoft.Azure.Functions.Extensions.Redis.Helpers;
 using Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Extensions.Configuration;
@@ -10,19 +11,21 @@ using Microsoft.VisualBasic;
 
 namespace Farrellsoft.Azure.Functions.Extensions.Redis
 {
-	internal class RedisBindingProvider : IBindingProvider
+	public class RedisBindingProvider : IBindingProvider
 	{
         private readonly IConfiguration _configuration;
+        private readonly IParameterInfoHelper _parameterInfoHelper;
 
-        public RedisBindingProvider(IConfiguration configuration)
+        public RedisBindingProvider(IConfiguration configuration, IParameterInfoHelper parameterInfoHelper)
         {
             _configuration = configuration;
+            _parameterInfoHelper = parameterInfoHelper;
         }
 
 		public Task<IBinding> TryCreateAsync(BindingProviderContext context)
         {
-            var attribute = context.Parameter.GetCustomAttribute<RedisAttribute>(inherit: false);
-            var genericArgs = context.Parameter.ParameterType.GetGenericArguments();
+            var attribute = _parameterInfoHelper.GetRedisAttribute(context.Parameter);
+            var genericArgs = _parameterInfoHelper.GetGenericTypeArgs(context.Parameter);
 
             // we are dealing with a string
             if (genericArgs.Length == 0)

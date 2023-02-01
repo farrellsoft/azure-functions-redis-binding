@@ -25,7 +25,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
             bindingRule
                 .BindToCollector<DocumentOpenType>(typeof(RedisCollectorBuilder<>));
 
-            bindingRule.Bind(new RedisBindingProvider(_configuration));
+            bindingRule.Bind(new RedisBindingProvider(_configuration, new Helpers.ParameterInfoHelper()));
         }
 
         private void ValidateAttribute(RedisAttribute attribute, Type type)

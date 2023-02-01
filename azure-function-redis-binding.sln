@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "azure-function-redis-bindin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "azure-function-sandbox", "SandboxFunction\azure-function-sandbox.csproj", "{AD6F6D0B-6300-4E36-BCCE-EA06FD82F009}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "azure-function-redis-binding-tests", "azure-function-redis-binding-tests\azure-function-redis-binding-tests.csproj", "{039F9F27-D261-4172-8F79-BAEE3992B5A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{AD6F6D0B-6300-4E36-BCCE-EA06FD82F009}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD6F6D0B-6300-4E36-BCCE-EA06FD82F009}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD6F6D0B-6300-4E36-BCCE-EA06FD82F009}.Release|Any CPU.Build.0 = Release|Any CPU
+		{039F9F27-D261-4172-8F79-BAEE3992B5A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{039F9F27-D261-4172-8F79-BAEE3992B5A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{039F9F27-D261-4172-8F79-BAEE3992B5A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{039F9F27-D261-4172-8F79-BAEE3992B5A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

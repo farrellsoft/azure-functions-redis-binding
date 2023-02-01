@@ -7,7 +7,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Farrellsoft.Azure.Functions.Extensions.Redis.Bindings
 {
-	internal class RedisItemBinding : IBinding
+	public class RedisItemBinding : IBinding
 	{
         private readonly RedisAttribute _attribute;
         private readonly IConfiguration _configuration;

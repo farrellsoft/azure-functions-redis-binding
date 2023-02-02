@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Moq;
 using Xunit;
 
-namespace azure_function_redis_binding_tests
+namespace Tests
 {
 	public class given_an_instance_of_RedisItemBinding
     {
@@ -21,18 +21,12 @@ namespace azure_function_redis_binding_tests
         {
             // arrange
             var binding = new RedisItemBinding(
-                new RedisAttribute(string.Empty) {  Connection = "SomeConnection" },
+                MoqHelper.GetRedisAttribute("somekey", "SomeConnection"),
                 MoqHelper.BuildConfiguration(new Dictionary<string, string> { { "SomeConnection", "SomeValue" } }),
                 typeof(string));
 
-            var valueBindingContext = new ValueBindingContext(
-                new FunctionBindingContext(
-                    functionInstance: new Mock<IFunctionInstanceEx>().Object,
-                    functionCancellationToken: new System.Threading.CancellationToken()),
-                cancellationToken: new System.Threading.CancellationToken());
-
             var context = new BindingContext(
-                valueContext: valueBindingContext,
+                valueContext: MoqHelper.GetValueBindingContext(),
                 bindingData: new ReadOnlyDictionary<string, object>(new Dictionary<string, object>()));
 
             // act
@@ -40,6 +34,26 @@ namespace azure_function_redis_binding_tests
 
             // assert
             Assert.True(valueProvider is RedisStringValueProvider);
+        }
+
+        [Fact]
+        public async Task validate_a_single_non_string_type_returns_RedisObjectValueProvider()
+        {
+            // arrange
+            var binding = new RedisItemBinding(
+                MoqHelper.GetRedisAttribute("somekey", "SomeConnection"),
+                MoqHelper.BuildConfiguration(new Dictionary<string, string> { { "SomeConnection", "SomeValue" } }),
+                typeof(object));
+
+            var context = new BindingContext(
+                valueContext: MoqHelper.GetValueBindingContext(),
+                bindingData: new ReadOnlyDictionary<string, object>(new Dictionary<string, object>()));
+
+            // act
+            var valueProvider = await binding.BindAsync(context);
+
+            // assert
+            Assert.True(valueProvider is RedisObjectValueProvider<object>);
         }
     }
 }

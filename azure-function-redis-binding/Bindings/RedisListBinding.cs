@@ -26,9 +26,6 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Bindings
                 _attribute.Connection,
                 _attribute.Key,
                 _configuration));
-
-
-            return Task.FromResult<IValueProvider>(new RedisStringValueProvider(_attribute.Connection, _attribute.Key, _configuration));
         }
 
         public bool FromAttribute => false;

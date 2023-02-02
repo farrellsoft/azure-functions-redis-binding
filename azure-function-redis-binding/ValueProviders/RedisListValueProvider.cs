@@ -6,7 +6,7 @@ using StackExchange.Redis;
 
 namespace Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders
 {
-	internal class RedisListValueProvider<TValue> : IValueProvider
+	public sealed class RedisListValueProvider<TValue> : IValueProvider
 	{
         private readonly string _connection;
         private readonly string _key;

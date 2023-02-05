@@ -27,7 +27,7 @@ jobs:
         uses: dorny/test-reporter@v1
         with:
           name: Test Report
-          path: azure-function-redis-binding-tests
+          path: azure-function-redis-binding-tests/TestResults
           reporter: dotnet-trx
           list-suites: 'all'
           list-tests: 'all'

@@ -6,7 +6,7 @@ on:
 
 jobs:
   publish:
-    name: Publish
+    name: Validate
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -20,6 +20,17 @@ jobs:
       - name: Test
         run: dotnet test
         working-directory: azure-function-redis-binding-tests
+
+      - name: Report
+        uses: dorny/test-reporter@v1
+        with:
+          name: Test Report
+          path: azure-function-redis-binding-tests/TestResults
+          reporter: xunit
+          list-suites: true
+          list-tests: true
+          max-annotations: 50
+          fail-on-error: false
 
       - name: Pack
         run: dotnet pack -c Release --output "./" /p:Version=0.0.1

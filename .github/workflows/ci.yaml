@@ -18,7 +18,7 @@ jobs:
           dotnet-version: 6.0.x
 
       - name: Test
-        run: dotnet test
+        run: dotnet test --logger trx
         working-directory: azure-function-redis-binding-tests
 
       - name: Report

@@ -1,4 +1,5 @@
 ﻿using System;
+using Farrellsoft.Azure.Functions.Extensions.Redis.Clients;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -8,24 +9,20 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders
 {
 	public sealed class RedisHashMapValueProvider<TValue> : IValueProvider
 	{
-        private readonly string _connection;
+        private readonly IClient _client;
+        private readonly string _connectionName;
         private readonly string _key;
 
-        public RedisHashMapValueProvider(string connectionName, string key, IConfiguration configuration)
+        public RedisHashMapValueProvider(string connectionName, string key, IClient client)
 		{
-            if (connectionName == null)
-                throw new ArgumentNullException("You must specify the name of the connection in settings");
-
-            _connection = configuration.GetValue<string>(connectionName);
-            if (_connection == null)
-                throw new ArgumentNullException($"The settings value {connectionName} was not found");
-
+            _connectionName = connectionName;
             _key = key;
+            _client = client;
         }
 
         public async Task<object> GetValueAsync()
         {
-            using var connection = ConnectionMultiplexer.Connect(_connection);
+            /*using var connection = ConnectionMultiplexer.Connect(_connection);
             var database = connection.GetDatabase();
 
             var results = await database.HashGetAllAsync(_key);
@@ -46,7 +43,8 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders
                 }
             }
 
-            return returnDictionary;
+            return returnDictionary;*/
+            return await _client.GetHashMap<TValue>(_connectionName, _key);
         }
 
         public Type Type

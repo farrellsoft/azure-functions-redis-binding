@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Farrellsoft.Azure.Functions.Extensions.Redis.Bindings;
+using Farrellsoft.Azure.Functions.Extensions.Redis.Clients;
 using Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders;
 using Microsoft.Azure.WebJobs.Host.Bindings;
+using Moq;
 using Xunit;
 
 namespace Tests
@@ -17,7 +19,7 @@ namespace Tests
             // arrange
             var binding = new RedisListBinding<string>(
                 MoqHelper.GetRedisAttribute("somekey", "SomeConnection"),
-                MoqHelper.BuildConfiguration(new Dictionary<string, string> { { "SomeConnection", "SomeValue" } }));
+                new Mock<IClient>().Object);
 
             var context = new BindingContext(
                 valueContext: MoqHelper.GetValueBindingContext(),

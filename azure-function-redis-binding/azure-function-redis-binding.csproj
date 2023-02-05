@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <None Remove="Helpers\" />
+    <None Remove="Clients\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Readme.md" Pack="true" PackagePath="/" />
@@ -30,5 +31,6 @@
 
   <ItemGroup>
     <Folder Include="Helpers\" />
+    <Folder Include="Clients\" />
   </ItemGroup>
 </Project>

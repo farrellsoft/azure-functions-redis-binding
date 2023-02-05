@@ -1,4 +1,5 @@
 ﻿using System;
+using Farrellsoft.Azure.Functions.Extensions.Redis.Clients;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -8,24 +9,20 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders
 {
 	public sealed class RedisListValueProvider<TValue> : IValueProvider
 	{
-        private readonly string _connection;
+        private readonly IClient _client;
+        private readonly string _connectionName;
         private readonly string _key;
 
-        public RedisListValueProvider(string connectionName, string key, IConfiguration configuration)
+        public RedisListValueProvider(string connectionName, string key, IClient client)
 		{
-            if (connectionName == null)
-                throw new ArgumentNullException("You must specify the name of the connection in settings");
-
-            _connection = configuration.GetValue<string>(connectionName);
-            if (_connection == null)
-                throw new ArgumentNullException($"The settings value {connectionName} was not found");
-
+            _connectionName = connectionName;
             _key = key;
+            _client = client;
         }
 
         public async Task<object> GetValueAsync()
         {
-            using var connection = ConnectionMultiplexer.Connect(_connection);
+            /*using var connection = ConnectionMultiplexer.Connect(_connection);
             var database = connection.GetDatabase();
 
             var redisResult = await database.ListRangeAsync(_key);
@@ -36,7 +33,8 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders
             else
             {
                 return redisResult.Select(x => x.ToString()).Cast<TValue>().ToList();
-            }
+            }*/
+            return await _client.GetList<TValue>(_connectionName, _key);
         }
 
         public Type Type => typeof(List<TValue>);

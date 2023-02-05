@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Reflection.Metadata;
 using Farrellsoft.Azure.Functions.Extensions.Redis.Bindings;
 using Farrellsoft.Azure.Functions.Extensions.Redis.Builders;
+using Farrellsoft.Azure.Functions.Extensions.Redis.Clients;
 using Farrellsoft.Azure.Functions.Extensions.Redis.Helpers;
 using Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders;
 using Microsoft.Azure.WebJobs.Host.Bindings;
@@ -13,12 +14,12 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
 {
 	public class RedisBindingProvider : IBindingProvider
 	{
-        private readonly IConfiguration _configuration;
+        private readonly IClient _client;
         private readonly IParameterInfoHelper _parameterInfoHelper;
 
-        public RedisBindingProvider(IConfiguration configuration, IParameterInfoHelper parameterInfoHelper)
+        public RedisBindingProvider(IClient client, IParameterInfoHelper parameterInfoHelper)
         {
-            _configuration = configuration;
+            _client = client;
             _parameterInfoHelper = parameterInfoHelper;
         }
 
@@ -32,7 +33,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
             {
                 // todo: validate we are dealing with a string or T
 
-                return Task.FromResult<IBinding>(new RedisItemBinding(attribute, _configuration, context.Parameter.ParameterType));
+                return Task.FromResult<IBinding>(new RedisItemBinding(attribute, _client, context.Parameter.ParameterType));
             }
 
             // we are dealing with a destination type generic with one arg, it needs to be a list
@@ -45,7 +46,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
                 return Task.FromResult<IBinding>((IBinding)Activator.CreateInstance(
                     type: constructedProvider,
                     attribute,
-                    _configuration));
+                    _client));
             }
 
             if (genericArgs.Length == 2)
@@ -57,7 +58,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
                 return Task.FromResult<IBinding>((IBinding)Activator.CreateInstance(
                     type: constructedProvider,
                     attribute,
-                    _configuration));
+                    _client));
             }
 
             throw new NotSupportedException("Binding types with more than 2 generics are not supported. See documentation for full list");

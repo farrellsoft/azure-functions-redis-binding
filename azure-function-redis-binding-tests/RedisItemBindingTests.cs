@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Farrellsoft.Azure.Functions.Extensions.Redis;
 using Farrellsoft.Azure.Functions.Extensions.Redis.Bindings;
+using Farrellsoft.Azure.Functions.Extensions.Redis.Clients;
 using Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Azure.WebJobs.Host.Executors;
@@ -22,7 +23,7 @@ namespace Tests
             // arrange
             var binding = new RedisItemBinding(
                 MoqHelper.GetRedisAttribute("somekey", "SomeConnection"),
-                MoqHelper.BuildConfiguration(new Dictionary<string, string> { { "SomeConnection", "SomeValue" } }),
+                new Mock<IClient>().Object,
                 typeof(string));
 
             var context = new BindingContext(
@@ -42,7 +43,7 @@ namespace Tests
             // arrange
             var binding = new RedisItemBinding(
                 MoqHelper.GetRedisAttribute("somekey", "SomeConnection"),
-                MoqHelper.BuildConfiguration(new Dictionary<string, string> { { "SomeConnection", "SomeValue" } }),
+                new Mock<IClient>().Object,
                 typeof(object));
 
             var context = new BindingContext(

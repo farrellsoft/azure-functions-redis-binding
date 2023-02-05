@@ -1,4 +1,5 @@
 ﻿using System;
+using Farrellsoft.Azure.Functions.Extensions.Redis.Clients;
 using Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Azure.WebJobs.Host.Protocols;
@@ -9,12 +10,12 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Bindings
 	public class RedisHashMapBinding<TValue> : IBinding
 	{
         private readonly RedisAttribute _attribute;
-        private readonly IConfiguration _configuration;
+        private readonly IClient _client;
 
-		public RedisHashMapBinding(RedisAttribute attribute, IConfiguration configuration)
+		public RedisHashMapBinding(RedisAttribute attribute, IClient client)
 		{
             _attribute = attribute;
-            _configuration = configuration;
+            _client = client;
 		}
 
         public Task<IValueProvider> BindAsync(BindingContext context)
@@ -25,7 +26,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Bindings
                 type: constructedProvider,
                 _attribute.Connection,
                 _attribute.Key,
-                _configuration));
+                _client));
         }
 
         public bool FromAttribute => false;

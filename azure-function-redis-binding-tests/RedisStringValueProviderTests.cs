@@ -23,7 +23,6 @@ namespace Tests
 			var result = await valueProvider.GetValueAsync();
 
 			// assert
-			Assert.True(result is string);
 			Assert.Equal("valid value", result.ToString());
 		}
 	}

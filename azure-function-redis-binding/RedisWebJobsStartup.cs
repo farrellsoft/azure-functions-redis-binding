@@ -1,7 +1,9 @@
 
 using Farrellsoft.Azure.Functions.Extensions.Redis;
+using Farrellsoft.Azure.Functions.Extensions.Redis.Clients;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 [assembly: WebJobsStartup(typeof(RedisWebJobsStartup))]
 namespace Farrellsoft.Azure.Functions.Extensions.Redis
@@ -11,6 +13,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
         public void Configure(IWebJobsBuilder builder)
         {
             builder.AddRedis();
+            builder.Services.AddTransient<IClient, RedisClient>();
         }
     }
 

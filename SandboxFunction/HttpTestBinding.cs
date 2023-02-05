@@ -19,10 +19,10 @@ namespace Sandbox
         [FunctionName("TestSandbox")]
         public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "test")] HttpRequest request,
-            [Redis("brothers", Connection = "RedisConnectionString")] Dictionary<string, Person> values)
+            [Redis("value", Connection = "RedisConnectionString")] string value)
         {   
-            var strings = values.Select(x => $"age: {x.Key} name: {x.Value.FirstName}");
-            return new OkObjectResult(String.Join(",", strings));
+            //var strings = values.Select(x => $"age: {x.Key} name: {x.Value.FirstName}");
+            return new OkObjectResult(value);
         }
     }
 }

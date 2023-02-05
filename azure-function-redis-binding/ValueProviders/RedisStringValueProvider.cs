@@ -22,8 +22,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders
 
         public async Task<object> GetValueAsync()
         {
-            var result = await _client.GetStringValue(_connectionName, _key);
-            return result.ToString();
+            return await _client.GetStringValue(_connectionName, _key);
         }
 
         public Type Type => typeof(string);

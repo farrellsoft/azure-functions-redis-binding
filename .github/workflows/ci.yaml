@@ -18,14 +18,14 @@ jobs:
           dotnet-version: 6.0.x
 
       - name: Test
-        run: dotnet test --logger trx
+        run: dotnet test --logger "trx;LogFileName=test-results.trx"
         working-directory: azure-function-redis-binding-tests
 
       - name: Report
         uses: dorny/test-reporter@v1
         with:
           name: Test Report
-          path: azure-function-redis-binding-tests/TestResults
+          path: azure-function-redis-binding-tests
           reporter: dotnet-trx
           list-suites: 'all'
           list-tests: 'all'

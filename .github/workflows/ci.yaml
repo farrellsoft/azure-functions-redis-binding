@@ -26,9 +26,9 @@ jobs:
         with:
           name: Test Report
           path: azure-function-redis-binding-tests/TestResults
-          reporter: xunit
-          list-suites: true
-          list-tests: true
+          reporter: dotnet-trx
+          list-suites: 'all'
+          list-tests: 'all'
           max-annotations: 50
           fail-on-error: false
 

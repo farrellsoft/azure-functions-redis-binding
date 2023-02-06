@@ -10,7 +10,7 @@ using Moq;
 using Tests;
 using Xunit;
 
-namespace azure_function_redis_binding_tests
+namespace Tests
 {
     public class given_an_instance_of_RedisHashMapBinding
     {

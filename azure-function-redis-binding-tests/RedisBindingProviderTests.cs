@@ -14,7 +14,7 @@ using Xunit;
 
 namespace Tests;
 
-public class Tests
+public class given_an_instance_of_RedisBindingProvider
 {
     [Fact]
     public async Task validate_a_non_generic_parameter_returns_RedisItemBinding()

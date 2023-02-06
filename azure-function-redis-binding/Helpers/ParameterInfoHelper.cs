@@ -14,12 +14,18 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Helpers
 		{
             return parameterInfo.ParameterType.GetGenericArguments();
         }
-	}
+
+        public Type GetParameterType(ParameterInfo parameterInfo)
+        {
+			return parameterInfo.ParameterType;
+        }
+    }
 
 	public interface IParameterInfoHelper
 	{
 		RedisAttribute GetRedisAttribute(ParameterInfo parameterInfo);
 		Type[] GetGenericTypeArgs(ParameterInfo parameterInfo);
+		Type GetParameterType(ParameterInfo parameterInfo);
 	}
 }
 

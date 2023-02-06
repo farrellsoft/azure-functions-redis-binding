@@ -28,10 +28,12 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
             var attribute = _parameterInfoHelper.GetRedisAttribute(context.Parameter);
             var genericArgs = _parameterInfoHelper.GetGenericTypeArgs(context.Parameter);
 
-            // we are dealing with a string
+            // we are dealing with a string (or POCO)
             if (genericArgs.Length == 0)
             {
-                // todo: validate we are dealing with a string or T
+                var parameterType = _parameterInfoHelper.GetParameterType(context.Parameter);
+                if (parameterType != typeof(string) && parameterType.IsClass == false)
+                    throw new NotSupportedException($"The type {parameterType.ToString()} is not supported for binding");
 
                 return Task.FromResult<IBinding>(new RedisItemBinding(attribute, _client, context.Parameter.ParameterType));
             }
@@ -39,9 +41,13 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
             // we are dealing with a destination type generic with one arg, it needs to be a list
             if (genericArgs.Length == 1)
             {
-                // todo: validate we are dealing with a List<T>
+                var parameterType = _parameterInfoHelper.GetParameterType(context.Parameter);
+                if (parameterType.GetGenericTypeDefinition() != typeof(List<>)) 
+                    throw new NotSupportedException($"You may only use List<T> as the destination type when binding a single generic type");
 
-                var providerType = typeof(RedisListBinding<>);
+                // todo: validate the inner argument is a string or object
+
+                    var providerType = typeof(RedisListBinding<>);
                 var constructedProvider = providerType.MakeGenericType(new[] { genericArgs[0] });
                 return Task.FromResult<IBinding>((IBinding)Activator.CreateInstance(
                     type: constructedProvider,

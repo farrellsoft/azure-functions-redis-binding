@@ -22,28 +22,6 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders
 
         public async Task<object> GetValueAsync()
         {
-            /*using var connection = ConnectionMultiplexer.Connect(_connection);
-            var database = connection.GetDatabase();
-
-            var results = await database.HashGetAllAsync(_key);
-
-            var resultNames = results.Select(x => x.Name.ToString()).ToArray();
-            var resultValues = results.Select(x => x.Value.ToString()).Cast<string>().ToArray();
-            var returnDictionary = new Dictionary<string, TValue>();
-
-            for (int idx = 0; idx < resultNames.Length; idx++)
-            {
-                if (typeof(TValue) != typeof(string))
-                {
-                    returnDictionary.Add(resultNames[idx], JsonConvert.DeserializeObject<TValue>(resultValues[idx].ToString()));
-                }
-                else
-                {
-                    returnDictionary.Add(resultNames[idx], (TValue)(object)resultValues[idx].ToString());
-                }
-            }
-
-            return returnDictionary;*/
             return await _client.GetHashMap<TValue>(_connectionName, _key);
         }
 

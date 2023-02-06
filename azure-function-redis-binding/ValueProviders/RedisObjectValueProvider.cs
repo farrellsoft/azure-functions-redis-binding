@@ -7,7 +7,7 @@ using StackExchange.Redis;
 
 namespace Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders
 {
-	public sealed class RedisObjectValueProvider<TValue> : IValueProvider
+	public sealed class RedisObjectValueProvider<TValue> : IValueProvider where TValue : class
 	{
         private readonly IClient _client;
         private readonly string _connectionName;
@@ -22,12 +22,6 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders
 
         public async Task<object> GetValueAsync()
         {
-            /*using var connection = ConnectionMultiplexer.Connect(_connection);
-            var database = connection.GetDatabase();
-
-            var result = await connection.GetDatabase().StringGetAsync(_key);
-
-            return JsonConvert.DeserializeObject<TValue>(result.ToString());*/
             return await _client.GetObject<TValue>(_connectionName, _key);
         }
 

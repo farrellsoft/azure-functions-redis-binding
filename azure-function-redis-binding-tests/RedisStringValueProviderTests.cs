@@ -10,7 +10,7 @@ namespace Tests
 	public class given_an_instance_of_RedisStringValueProvider
 	{
 		[Fact]
-		public async void validate_for_a_given_valid_key_the_string_value_is_returned()
+		public async void validate_the_RedisStringValueProvider_calls_the_GetStringValue_method_one_time()
 		{
 			// arrange
 			var clientMock = new Mock<IClient>();
@@ -20,10 +20,10 @@ namespace Tests
 			var valueProvider = new RedisStringValueProvider("redisConnection", "valid_key", clientMock.Object);
 
 			// act
-			var result = await valueProvider.GetValueAsync();
+			await valueProvider.GetValueAsync();
 
 			// assert
-			Assert.Equal("valid value", result.ToString());
+			clientMock.Verify(x => x.GetStringValue("redisConnection", "valid_key"), Times.Once);
 		}
 	}
 }

@@ -9,12 +9,12 @@ namespace Tests
 	public class given_an_instance_of_RedisObjectValueProvider
     {
 		[Fact]
-		public async void validate_returned_result_iss_intended_object()
+		public async void validate_RedisObjectValueProvider_returns_an_object_matching_the_target_type()
 		{
             // arrange
             var clientMock = new Mock<IClient>();
             clientMock.Setup(x => x.GetObject<TestObject>(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new TestObject() { Value = "test" });
+                .ReturnsAsync(new TestObject());
 
             var provider = new RedisObjectValueProvider<TestObject>("someConnection", "someKey", clientMock.Object);
 
@@ -24,12 +24,27 @@ namespace Tests
             // assert
             var typedResult = result as TestObject;
             Assert.NotNull(typedResult);
-            Assert.Equal("test", typedResult.Value);
 		}
+
+        [Fact]
+        public async void validate_RedisObjectValueProvider_invokes_the_GetObject_method()
+        {
+            // arrange
+            var clientMock = new Mock<IClient>();
+            clientMock.Setup(x => x.GetObject<TestObject>(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new TestObject());
+
+            var provider = new RedisObjectValueProvider<TestObject>("someConnection", "someKey", clientMock.Object);
+
+            // act
+            await provider.GetValueAsync();
+
+            // assert
+            clientMock.Verify(x => x.GetObject<TestObject>("someConnection", "someKey"), Times.Once);
+        }
 
         private class TestObject
         {
-            public string Value { get; set; }
         }
     }
 }

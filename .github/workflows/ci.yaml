@@ -24,7 +24,6 @@ jobs:
       - name: Test
         run: |
           dotnet test --logger "trx;LogFileName=test-results.trx"
-          ls -l
         working-directory: azure-function-redis-binding-tests
 
       - name: Report

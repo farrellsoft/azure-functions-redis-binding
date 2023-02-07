@@ -32,7 +32,7 @@ jobs:
           name: Test Report
           path: azure-function-redis-binding-tests/TestResults/test-results.trx
           reporter: dotnet-trx
-          list-suites: 'failed'
+          list-suites: 'all'
           list-tests: 'all'
           max-annotations: 50
           fail-on-error: false

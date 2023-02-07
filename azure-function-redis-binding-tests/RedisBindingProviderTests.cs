@@ -43,7 +43,7 @@ public class given_an_instance_of_RedisBindingProvider
 
     [Fact]
     public async Task validate_a_single_generic_type_returns_RedisListBinding()
-    {   
+    {
         var paramInfoHelperMock = new Mock<IParameterInfoHelper>();
         paramInfoHelperMock.Setup(x => x.GetGenericTypeArgs(It.IsAny<ParameterInfo>()))
             .Returns(new Type[] { typeof(string) });
@@ -72,6 +72,8 @@ public class given_an_instance_of_RedisBindingProvider
         var paramInfoHelperMock = new Mock<IParameterInfoHelper>();
         paramInfoHelperMock.Setup(x => x.GetGenericTypeArgs(It.IsAny<ParameterInfo>()))
             .Returns(new Type[] { typeof(string), typeof(string) });
+        paramInfoHelperMock.Setup(x => x.GetParameterType(It.IsAny<ParameterInfo>()))
+            .Returns(typeof(Dictionary<string, string>));
 
         var provider = new RedisBindingProvider(new Mock<IClient>().Object, paramInfoHelperMock.Object);
 
@@ -141,6 +143,29 @@ public class given_an_instance_of_RedisBindingProvider
             .Returns(new Type[1]);
         paramInfoHelperMock.Setup(x => x.GetParameterType(It.IsAny<ParameterInfo>()))
             .Returns(typeof(Collection<string>));
+
+        var provider = new RedisBindingProvider(new Mock<IClient>().Object, paramInfoHelperMock.Object);
+
+        var paramInfoMock = new Mock<ParameterInfo>();
+        var context = new BindingProviderContext(
+            parameter: paramInfoMock.Object,
+            bindingDataContract: new ReadOnlyDictionary<string, Type>(new Dictionary<string, Type>()),
+            cancellationToken: new System.Threading.CancellationToken());
+
+        // act
+        // assert
+        await Assert.ThrowsAsync<NotSupportedException>(async () => await provider.TryCreateAsync(context));
+    }
+
+    [Fact]
+    public async void validate_if_a_non_Dictionary_type_is_bound_a_NotSupportedException_is_raised()
+    {
+        // arrange
+        var paramInfoHelperMock = new Mock<IParameterInfoHelper>();
+        paramInfoHelperMock.Setup(x => x.GetGenericTypeArgs(It.IsAny<ParameterInfo>()))
+            .Returns(new Type[2]);
+        paramInfoHelperMock.Setup(x => x.GetParameterType(It.IsAny<ParameterInfo>()))
+            .Returns(typeof(Tuple<string, string>));
 
         var provider = new RedisBindingProvider(new Mock<IClient>().Object, paramInfoHelperMock.Object);
 

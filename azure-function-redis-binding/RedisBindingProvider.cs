@@ -57,7 +57,9 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
 
             if (genericArgs.Length == 2)
             {
-                // todo: validate we are dealing with a Dictionary<string, T>
+                var parameterType = _parameterInfoHelper.GetParameterType(context.Parameter);
+                if (parameterType.GetGenericTypeDefinition() != typeof(Dictionary<,>))
+                    throw new NotSupportedException($"You may only use Dictionary<TKey, TValue> when being a two generic type");
 
                 var providerType = typeof(RedisHashMapBinding<>);
                 var constructedProvider = providerType.MakeGenericType(new[] { genericArgs[1] });

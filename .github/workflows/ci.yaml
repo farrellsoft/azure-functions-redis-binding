@@ -23,21 +23,8 @@ jobs:
 
       - name: Test
         run: |
-          dotnet test --logger "trx;LogFileName=test-results.trx" --collect:"XPlat Code Coverage" --results-directory ./coverage
-          ls -l
-          ls -l ../
+          dotnet test --collect:"XPlat Code Coverage" --results-directory ./coverage
         working-directory: azure-function-redis-binding-tests
-
-      - name: Report
-        uses: dorny/test-reporter@v1
-        with:
-          name: Test Report
-          path: azure-function-redis-binding-tests/TestResults/test-results.trx
-          reporter: dotnet-trx
-          list-suites: 'failed'
-          list-tests: 'all'
-          max-annotations: 50
-          fail-on-error: false
 
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0

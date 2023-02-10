@@ -51,7 +51,7 @@ jobs:
       - name: Collect Code Coverage
         run: |
           dotnet test --collect:"XPlat Code Coverage" --results-directory ./coverage
-          ls -la
+          ls -la ./coverage
         working-directory: azure-function-redis-binding-tests
 
       - name: Code Coverage Report

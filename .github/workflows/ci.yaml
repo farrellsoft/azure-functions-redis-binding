@@ -63,11 +63,5 @@ jobs:
           hide_branch_rate: true
           hide_complexity: true
           indicators: true
-          output: both
+          output: console
           thresholds: '30 80'
-
-      - name: Upload Code Coverage
-        uses: codecov/codecov-action@v1
-        with:
-          files: 'code-coverage-results.md'
-          fail_ci_if_error: true

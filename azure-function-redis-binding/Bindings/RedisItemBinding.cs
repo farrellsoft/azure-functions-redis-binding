@@ -1,5 +1,5 @@
 ﻿using System;
-using Farrellsoft.Azure.Functions.Extensions.Redis.Clients;
+using Farrellsoft.Azure.Functions.Extensions.Redis.Converters;
 using Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Azure.WebJobs.Host.Protocols;
@@ -11,13 +11,13 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Bindings
 	public class RedisItemBinding : IBinding
 	{
         private readonly RedisAttribute _attribute;
-        private readonly IClient _client;
+        private readonly IRedisValueConverter _valueConverter;
         private readonly Type _targetType;
 
-		public RedisItemBinding(RedisAttribute attribute, IClient client, Type targetType)
+		public RedisItemBinding(RedisAttribute attribute, IRedisValueConverter valueConverter, Type targetType)
 		{
             _attribute = attribute;
-            _client = client;
+            _valueConverter = valueConverter;
             _targetType = targetType;
 		}
 
@@ -26,7 +26,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Bindings
         public Task<IValueProvider> BindAsync(BindingContext context)
         {
             if (_targetType == typeof(string))
-                return Task.FromResult<IValueProvider>(new RedisStringValueProvider(_attribute.Connection, _attribute.Key, _client));
+                return Task.FromResult<IValueProvider>(new RedisStringValueProvider(_attribute.Connection, _attribute.Key, _valueConverter));
 
             var providerType = typeof(RedisObjectValueProvider<>);
             var constructedProvider = providerType.MakeGenericType(new[] { _targetType });
@@ -34,7 +34,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Bindings
                 type: constructedProvider,
                 _attribute.Connection,
                 _attribute.Key,
-                _client));
+                _valueConverter));
         }
 
         public Task<IValueProvider> BindAsync(object value, ValueBindingContext context) => throw new NotImplementedException();

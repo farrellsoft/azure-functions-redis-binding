@@ -1,5 +1,5 @@
 ﻿using System;
-using Farrellsoft.Azure.Functions.Extensions.Redis.Clients;
+using Farrellsoft.Azure.Functions.Extensions.Redis.Converters;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
@@ -9,20 +9,20 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders
 {
 	public sealed class RedisStringValueProvider : IValueProvider
 	{
-        private readonly IClient _client;
+        private readonly IRedisValueConverter _valueConverter;
         private readonly string _connectionName;
         private readonly string _key;
 
-		public RedisStringValueProvider(string connectionName, string key, IClient client)
+		public RedisStringValueProvider(string connectionName, string key, IRedisValueConverter valueConverter)
 		{
-            _client = client;
+            _valueConverter = valueConverter;
             _connectionName = connectionName;
             _key = key;
 		}
 
         public async Task<object> GetValueAsync()
         {
-            return await _client.GetStringValue(_connectionName, _key);
+            return await _valueConverter.GetString(_connectionName, _key);
         }
 
         public Type Type => typeof(string);

@@ -1,5 +1,5 @@
 ﻿using System;
-using Farrellsoft.Azure.Functions.Extensions.Redis.Clients;
+using Farrellsoft.Azure.Functions.Extensions.Redis.Converters;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -9,20 +9,20 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders
 {
 	public sealed class RedisHashMapValueProvider<TValue> : IValueProvider
 	{
-        private readonly IClient _client;
+        private readonly IRedisValueConverter _valueConverter;
         private readonly string _connectionName;
         private readonly string _key;
 
-        public RedisHashMapValueProvider(string connectionName, string key, IClient client)
+        public RedisHashMapValueProvider(string connectionName, string key, IRedisValueConverter valueConverter)
 		{
             _connectionName = connectionName;
             _key = key;
-            _client = client;
+            _valueConverter = valueConverter;
         }
 
         public async Task<object> GetValueAsync()
         {
-            return await _client.GetHashMap<TValue>(_connectionName, _key);
+            return await _valueConverter.GetDictionary<TValue>(_connectionName, _key);
         }
 
         public Type Type

@@ -1,6 +1,7 @@
 
 using Farrellsoft.Azure.Functions.Extensions.Redis;
 using Farrellsoft.Azure.Functions.Extensions.Redis.Clients;
+using Farrellsoft.Azure.Functions.Extensions.Redis.Converters;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +15,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
         {
             builder.AddRedis();
             builder.Services.AddTransient<IClient, RedisClient>();
+            builder.Services.AddTransient<IRedisValueConverter, RedisValueConverter>();
         }
     }
 

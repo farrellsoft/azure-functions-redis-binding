@@ -4,14 +4,14 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 
-namespace Farrellsoft.Azure.Functions.Extensions.Redis.Provider
+namespace Farrellsoft.Azure.Functions.Extensions.Redis.Converters
 {
-	public class RedisValueProvider : IRedisValueProvider
+	public class RedisValueConverter : IRedisValueConverter
 	{
 		private readonly IClient _client;
 		private readonly IConfiguration _configuration;
 
-		public RedisValueProvider(IClient client, IConfiguration configuration)
+		public RedisValueConverter(IClient client, IConfiguration configuration)
 		{
 			_client = client;
 			_configuration = configuration;
@@ -81,7 +81,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Provider
         }
     }
 
-	internal interface IRedisValueProvider
+	public interface IRedisValueConverter
 	{
 		Task<Dictionary<string, TValue>> GetDictionary<TValue>(string connectionName, string key);
 		Task<List<TValue>> GetList<TValue>(string connectionName, string key);

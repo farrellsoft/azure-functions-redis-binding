@@ -1,6 +1,6 @@
 
 using Farrellsoft.Azure.Functions.Extensions.Redis.Builders;
-using Farrellsoft.Azure.Functions.Extensions.Redis.Clients;
+using Farrellsoft.Azure.Functions.Extensions.Redis.Converters;
 using Microsoft.Azure.WebJobs.Description;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Azure.WebJobs.Host.Config;
@@ -11,11 +11,11 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
     [Extension("Redis")]
     internal class RedisExtensionConfigProvider : IExtensionConfigProvider
     {
-        private readonly IClient _client;
+        private readonly IRedisValueConverter _valueConverter;
 
-        public RedisExtensionConfigProvider(IClient client)
+        public RedisExtensionConfigProvider(IRedisValueConverter valueConverter)
         {
-            _client = client;
+            _valueConverter = valueConverter;
         }
 
         public void Initialize(ExtensionConfigContext context)
@@ -26,7 +26,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
             bindingRule
                 .BindToCollector<DocumentOpenType>(typeof(RedisCollectorBuilder<>));
 
-            bindingRule.Bind(new RedisBindingProvider(_client, new Helpers.ParameterInfoHelper()));
+            bindingRule.Bind(new RedisBindingProvider(_valueConverter, new Helpers.ParameterInfoHelper()));
         }
 
         private void ValidateAttribute(RedisAttribute attribute, Type type)

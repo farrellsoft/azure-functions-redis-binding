@@ -10,7 +10,7 @@ using Moq;
 using Tests;
 using Xunit;
 
-namespace Tests
+namespace Tests.Bindings
 {
     public class given_an_instance_of_RedisHashMapBinding
     {

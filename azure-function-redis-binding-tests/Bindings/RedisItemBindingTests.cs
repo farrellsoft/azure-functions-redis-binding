@@ -13,7 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Moq;
 using Xunit;
 
-namespace Tests
+namespace Tests.Bindings
 {
 	public class given_an_instance_of_RedisItemBinding
     {

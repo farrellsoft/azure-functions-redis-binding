@@ -9,7 +9,7 @@ using Microsoft.Azure.WebJobs.Host.Bindings;
 using Moq;
 using Xunit;
 
-namespace Tests
+namespace Tests.Bindings
 {
 	public class given_an_instance_of_RedisListBinding
     {

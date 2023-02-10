@@ -3,7 +3,7 @@ using Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders;
 using Moq;
 using Xunit;
 
-namespace Tests
+namespace Tests.ValueProviders
 {
     public class given_an_instance_of_RedisObjectValueProvider
     {

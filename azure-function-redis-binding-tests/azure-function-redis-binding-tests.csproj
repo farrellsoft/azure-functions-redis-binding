@@ -27,4 +27,12 @@
   <ItemGroup>
     <ProjectReference Include="..\azure-function-redis-binding\azure-function-redis-binding.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Bindings\" />
+    <None Remove="ValueProviders\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Bindings\" />
+    <Folder Include="ValueProviders\" />
+  </ItemGroup>
 </Project>

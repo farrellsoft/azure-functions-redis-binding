@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Farrellsoft.Azure.Functions.Extensions.Redis;
 using Farrellsoft.Azure.Functions.Extensions.Redis.Bindings;
-using Farrellsoft.Azure.Functions.Extensions.Redis.Clients;
+using Farrellsoft.Azure.Functions.Extensions.Redis.Converters;
 using Farrellsoft.Azure.Functions.Extensions.Redis.Helpers;
 using Microsoft.Azure.WebJobs.Host.Bindings;
 using Microsoft.Extensions.Configuration;
@@ -26,7 +26,7 @@ public class given_an_instance_of_RedisBindingProvider
         paramInfoHelperMock.Setup(x => x.GetParameterType(It.IsAny<ParameterInfo>()))
             .Returns(typeof(string));
 
-        var provider = new RedisBindingProvider(new Mock<IClient>().Object, paramInfoHelperMock.Object);
+        var provider = new RedisBindingProvider(new Mock<IRedisValueConverter>().Object, paramInfoHelperMock.Object);
 
         var paramInfoMock = new Mock<ParameterInfo>();
         var context = new BindingProviderContext(
@@ -50,7 +50,7 @@ public class given_an_instance_of_RedisBindingProvider
         paramInfoHelperMock.Setup(x => x.GetParameterType(It.IsAny<ParameterInfo>()))
             .Returns(typeof(List<string>));
 
-        var provider = new RedisBindingProvider(new Mock<IClient>().Object, paramInfoHelperMock.Object);
+        var provider = new RedisBindingProvider(new Mock<IRedisValueConverter>().Object, paramInfoHelperMock.Object);
 
         var paramInfoMock = new Mock<ParameterInfo>();
         var context = new BindingProviderContext(
@@ -75,7 +75,7 @@ public class given_an_instance_of_RedisBindingProvider
         paramInfoHelperMock.Setup(x => x.GetParameterType(It.IsAny<ParameterInfo>()))
             .Returns(typeof(Dictionary<string, string>));
 
-        var provider = new RedisBindingProvider(new Mock<IClient>().Object, paramInfoHelperMock.Object);
+        var provider = new RedisBindingProvider(new Mock<IRedisValueConverter>().Object, paramInfoHelperMock.Object);
 
         var paramInfoMock = new Mock<ParameterInfo>();
         var context = new BindingProviderContext(
@@ -98,7 +98,7 @@ public class given_an_instance_of_RedisBindingProvider
         paramInfoHelperMock.Setup(x => x.GetGenericTypeArgs(It.IsAny<ParameterInfo>()))
             .Returns(new Type[] { typeof(string), typeof(string), typeof(string) });
 
-        var provider = new RedisBindingProvider(new Mock<IClient>().Object, paramInfoHelperMock.Object);
+        var provider = new RedisBindingProvider(new Mock<IRedisValueConverter>().Object, paramInfoHelperMock.Object);
 
         var paramInfoMock = new Mock<ParameterInfo>();
         var context = new BindingProviderContext(
@@ -121,7 +121,7 @@ public class given_an_instance_of_RedisBindingProvider
         paramInfoHelperMock.Setup(x => x.GetParameterType(It.IsAny<ParameterInfo>()))
             .Returns(typeof(int));
 
-        var provider = new RedisBindingProvider(new Mock<IClient>().Object, paramInfoHelperMock.Object);
+        var provider = new RedisBindingProvider(new Mock<IRedisValueConverter>().Object, paramInfoHelperMock.Object);
 
         var paramInfoMock = new Mock<ParameterInfo>();
         var context = new BindingProviderContext(
@@ -144,7 +144,7 @@ public class given_an_instance_of_RedisBindingProvider
         paramInfoHelperMock.Setup(x => x.GetParameterType(It.IsAny<ParameterInfo>()))
             .Returns(typeof(Collection<string>));
 
-        var provider = new RedisBindingProvider(new Mock<IClient>().Object, paramInfoHelperMock.Object);
+        var provider = new RedisBindingProvider(new Mock<IRedisValueConverter>().Object, paramInfoHelperMock.Object);
 
         var paramInfoMock = new Mock<ParameterInfo>();
         var context = new BindingProviderContext(
@@ -167,7 +167,7 @@ public class given_an_instance_of_RedisBindingProvider
         paramInfoHelperMock.Setup(x => x.GetParameterType(It.IsAny<ParameterInfo>()))
             .Returns(typeof(Tuple<string, string>));
 
-        var provider = new RedisBindingProvider(new Mock<IClient>().Object, paramInfoHelperMock.Object);
+        var provider = new RedisBindingProvider(new Mock<IRedisValueConverter>().Object, paramInfoHelperMock.Object);
 
         var paramInfoMock = new Mock<ParameterInfo>();
         var context = new BindingProviderContext(

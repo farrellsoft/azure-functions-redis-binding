@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Farrellsoft.Azure.Functions.Extensions.Redis.Clients;
+using Farrellsoft.Azure.Functions.Extensions.Redis.Converters;
 using Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders;
 using Moq;
 using Xunit;
@@ -13,11 +13,11 @@ namespace Tests
 		public async void validate_the_returned_result_is_a_dictionary_whose_value_type_is_TValue()
 		{
 			// arrange
-			var clientMock = new Mock<IClient>();
-			clientMock.Setup(x => x.GetHashMap<TestObject>(It.IsAny<string>(), It.IsAny<string>()))
+			var converterMock = new Mock<IRedisValueConverter>();
+			converterMock.Setup(x => x.GetDictionary<TestObject>(It.IsAny<string>(), It.IsAny<string>()))
 				.ReturnsAsync(new System.Collections.Generic.Dictionary<string, TestObject>());
 
-			var provider = new RedisHashMapValueProvider<TestObject>("someConnection", "someKey", clientMock.Object);
+			var provider = new RedisHashMapValueProvider<TestObject>("someConnection", "someKey", converterMock.Object);
 
 			// act
 			var result = await provider.GetValueAsync();
@@ -31,17 +31,17 @@ namespace Tests
 		public async void validate_the_instance_calls_the_GetHashMap_method_on_the_client_one_time()
 		{
             // arrange
-            var clientMock = new Mock<IClient>();
-            clientMock.Setup(x => x.GetHashMap<TestObject>(It.IsAny<string>(), It.IsAny<string>()))
+            var converterMock = new Mock<IRedisValueConverter>();
+            converterMock.Setup(x => x.GetDictionary<TestObject>(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new System.Collections.Generic.Dictionary<string, TestObject>());
 
-            var provider = new RedisHashMapValueProvider<TestObject>("someConnection", "someKey", clientMock.Object);
+            var provider = new RedisHashMapValueProvider<TestObject>("someConnection", "someKey", converterMock.Object);
 
             // act
             await provider.GetValueAsync();
 
 			// assert
-			clientMock.Verify(x => x.GetHashMap<TestObject>("someConnection", "someKey"), Times.Once);
+			converterMock.Verify(x => x.GetDictionary<TestObject>("someConnection", "someKey"), Times.Once);
         }
 
         private class TestObject { }

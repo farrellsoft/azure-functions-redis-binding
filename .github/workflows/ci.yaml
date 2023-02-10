@@ -59,11 +59,15 @@ jobs:
           filename: '**/coverage/**/coverage.cobertura.xml'
           badge: true
           fail_below_min: true
-          format: markdown
-          hide_branch_rate: false
+          format: text
+          hide_branch_rate: true
           hide_complexity: true
           indicators: true
           output: both
           thresholds: '30 80'
 
-      - run: ls -l
+      - name: Upload Code Coverage
+        uses: codecov/codecov-action@v1
+        with:
+          files: 'code-coverage-results.md'
+          fail_ci_if_error: true

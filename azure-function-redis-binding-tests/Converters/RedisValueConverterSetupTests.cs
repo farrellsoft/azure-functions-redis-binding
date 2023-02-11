@@ -16,7 +16,8 @@ namespace Tests.Converters
 			// arrange
 			var converter = new RedisValueConverter(
 				new Mock<IClient>().Object,
-				new Mock<IConfiguration>().Object);
+				new Mock<IConfiguration>().Object,
+                new Mock<IValueConverter>().Object);
 
 			// act
 			// assert
@@ -29,7 +30,8 @@ namespace Tests.Converters
 			// arrange
 			var converter = new RedisValueConverter(
 				new Mock<IClient>().Object,
-				MoqHelper.BuildConfiguration(new Dictionary<string, string>()));
+				MoqHelper.BuildConfiguration(new Dictionary<string, string>()),
+                new Mock<IValueConverter>().Object);
 
 			// act
 			// assert
@@ -45,7 +47,7 @@ namespace Tests.Converters
             {
                 { "someConnection", "connectionString" }
             });
-            var converter = new RedisValueConverter(clientMock.Object, configruation);
+            var converter = new RedisValueConverter(clientMock.Object, configruation, new Mock<IValueConverter>().Object);
 
             // act
             await converter.GetDictionary<string>("someConnection", "someKey");
@@ -60,7 +62,8 @@ namespace Tests.Converters
             // arrange
             var converter = new RedisValueConverter(
                 new Mock<IClient>().Object,
-                new Mock<IConfiguration>().Object);
+                new Mock<IConfiguration>().Object,
+                new Mock<IValueConverter>().Object);
 
             // act
             // assert
@@ -73,7 +76,8 @@ namespace Tests.Converters
             // arrange
             var converter = new RedisValueConverter(
                 new Mock<IClient>().Object,
-                MoqHelper.BuildConfiguration(new Dictionary<string, string>()));
+                MoqHelper.BuildConfiguration(new Dictionary<string, string>()),
+                new Mock<IValueConverter>().Object);
 
             // act
             // assert
@@ -89,7 +93,7 @@ namespace Tests.Converters
             {
                 { "someConnection", "connectionString" }
             });
-            var converter = new RedisValueConverter(clientMock.Object, configruation);
+            var converter = new RedisValueConverter(clientMock.Object, configruation, new Mock<IValueConverter>().Object);
 
             // act
             await converter.GetList<string>("someConnection", "someKey");
@@ -104,7 +108,8 @@ namespace Tests.Converters
             // arrange
             var converter = new RedisValueConverter(
                 new Mock<IClient>().Object,
-                new Mock<IConfiguration>().Object);
+                new Mock<IConfiguration>().Object,
+                new Mock<IValueConverter>().Object);
 
             // act
             // assert
@@ -117,7 +122,8 @@ namespace Tests.Converters
             // arrange
             var converter = new RedisValueConverter(
                 new Mock<IClient>().Object,
-                MoqHelper.BuildConfiguration(new Dictionary<string, string>()));
+                MoqHelper.BuildConfiguration(new Dictionary<string, string>()),
+                new Mock<IValueConverter>().Object);
 
             // act
             // assert
@@ -133,7 +139,7 @@ namespace Tests.Converters
             {
                 { "someConnection", "connectionString" }
             });
-            var converter = new RedisValueConverter(clientMock.Object, configruation);
+            var converter = new RedisValueConverter(clientMock.Object, configruation, new Mock<IValueConverter>().Object);
 
             // act
             await converter.GetObject<TestObject>("someConnection", "someKey");
@@ -150,7 +156,8 @@ namespace Tests.Converters
             // arrange
             var converter = new RedisValueConverter(
                 new Mock<IClient>().Object,
-                new Mock<IConfiguration>().Object);
+                new Mock<IConfiguration>().Object,
+                new Mock<IValueConverter>().Object);
 
             // act
             // assert
@@ -163,7 +170,8 @@ namespace Tests.Converters
             // arrange
             var converter = new RedisValueConverter(
                 new Mock<IClient>().Object,
-                MoqHelper.BuildConfiguration(new Dictionary<string, string>()));
+                MoqHelper.BuildConfiguration(new Dictionary<string, string>()),
+                new Mock<IValueConverter>().Object);
 
             // act
             // assert
@@ -179,7 +187,7 @@ namespace Tests.Converters
             {
                 { "someConnection", "connectionString" }
             });
-            var converter = new RedisValueConverter(clientMock.Object, configruation);
+            var converter = new RedisValueConverter(clientMock.Object, configruation, new Mock<IValueConverter>().Object);
 
             // act
             await converter.GetString("someConnection", "someKey");

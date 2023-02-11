@@ -10,14 +10,16 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Converters
 	{
 		private readonly IClient _client;
 		private readonly IConfiguration _configuration;
+        private readonly IValueConverter _valueConverter;
 
-		public RedisValueConverter(IClient client, IConfiguration configuration)
+		public RedisValueConverter(IClient client, IConfiguration configuration, IValueConverter valueConverter)
 		{
 			_client = client;
 			_configuration = configuration;
+            _valueConverter = valueConverter;
 		}
 
-        public async Task<Dictionary<string, TValue>> GetDictionary<TValue>(string connectionName, string key)
+        public async Task<Dictionary<string, TValue>> GetDictionary<TValue>(string connectionName, string key) where TValue : class
         {
             var connectionString = GetConnectionString(connectionName);
             var hashEntries = await _client.GetHashEntries(connectionString, key);
@@ -30,7 +32,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Converters
             {
                 if (typeof(TValue) != typeof(string))
                 {
-                    returnDictionary.Add(resultNames[idx], JsonConvert.DeserializeObject<TValue>(resultValues[idx].ToString()));
+                    returnDictionary.Add(resultNames[idx], _valueConverter.GetObjectFromString<TValue>(resultValues[idx].ToString()));
                 }
                 else
                 {
@@ -41,7 +43,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Converters
             return returnDictionary;
         }
 
-        public async Task<List<TValue>> GetList<TValue>(string connectionName, string key)
+        public async Task<List<TValue>> GetList<TValue>(string connectionName, string key) where TValue : class
         {
             var values = await _client.GetValues(GetConnectionString(connectionName), key);
             if (typeof(TValue) != typeof(string))
@@ -83,8 +85,8 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Converters
 
 	public interface IRedisValueConverter
 	{
-		Task<Dictionary<string, TValue>> GetDictionary<TValue>(string connectionName, string key);
-		Task<List<TValue>> GetList<TValue>(string connectionName, string key);
+		Task<Dictionary<string, TValue>> GetDictionary<TValue>(string connectionName, string key) where TValue : class;
+		Task<List<TValue>> GetList<TValue>(string connectionName, string key) where TValue : class;
 		Task<TValue?> GetObject<TValue>(string connectionName, string key) where TValue : class;
 		Task<string?> GetString(string connectionName, string key);
 	}

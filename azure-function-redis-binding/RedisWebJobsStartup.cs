@@ -16,6 +16,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
             builder.AddRedis();
             builder.Services.AddTransient<IClient, RedisClient>();
             builder.Services.AddTransient<IRedisValueConverter, RedisValueConverter>();
+            builder.Services.AddTransient<IValueConverter, JsonValueConverter>();
         }
     }
 

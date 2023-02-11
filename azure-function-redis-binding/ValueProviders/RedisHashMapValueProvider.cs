@@ -8,6 +8,7 @@ using StackExchange.Redis;
 namespace Farrellsoft.Azure.Functions.Extensions.Redis.ValueProviders
 {
 	public sealed class RedisHashMapValueProvider<TValue> : IValueProvider
+        where TValue : class
 	{
         private readonly IRedisValueConverter _valueConverter;
         private readonly string _connectionName;

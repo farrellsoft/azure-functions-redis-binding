@@ -30,9 +30,11 @@
   <ItemGroup>
     <None Remove="Bindings\" />
     <None Remove="ValueProviders\" />
+    <None Remove="Converters\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Bindings\" />
     <Folder Include="ValueProviders\" />
+    <Folder Include="Converters\" />
   </ItemGroup>
 </Project>

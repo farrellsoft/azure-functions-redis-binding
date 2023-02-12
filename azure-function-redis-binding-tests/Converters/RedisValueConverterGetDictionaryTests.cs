@@ -65,6 +65,41 @@ namespace Tests.Converters
 			// assert
 			converterMock.Verify(x => x.GetObjectFromString<It.IsAnyType>(It.IsAny<string>()), Times.Never);
         }
-	}
+
+		[Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        public async void validate_for_a_inner_type_is_a_class_the_right_number_of_calls_to_GetObjectFromString_are_made(int numberOfEntries)
+        {
+            // arrange
+            var entries = new StackExchange.Redis.HashEntry[numberOfEntries];
+            for (int i = 0; i < numberOfEntries; i++)
+            {
+                entries[i] = new StackExchange.Redis.HashEntry($"object{i}", "{}");
+            }
+
+            var clientMock = new Mock<IClient>();
+            clientMock.Setup(x => x.GetHashEntries(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(entries);
+            var configuration = MoqHelper.BuildConfiguration(new Dictionary<string, string>
+            {
+                { "validConnectionName", "someConnectionString" }
+            });
+
+            var converterMock = new Mock<IValueConverter>();
+            var converter = new RedisValueConverter(
+                clientMock.Object,
+                configuration,
+                converterMock.Object);
+
+            // act
+            var result = await converter.GetDictionary<TestObject>("validConnectionName", "someKey");
+
+            // assert
+            converterMock.Verify(x => x.GetObjectFromString<It.IsAnyType>(It.IsAny<string>()), Times.Exactly(numberOfEntries));
+        }
+
+        private class TestObject { }
+    }
 }
 

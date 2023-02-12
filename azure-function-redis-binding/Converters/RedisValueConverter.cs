@@ -48,7 +48,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Converters
             var values = await _client.GetValues(GetConnectionString(connectionName), key);
             if (typeof(TValue) != typeof(string))
             {
-                return values.Select(x => JsonConvert.DeserializeObject<TValue>(x.ToString())).ToList();
+                return values.Select(x => _valueConverter.GetObjectFromString<TValue>(x.ToString())).ToList();
             }
             else
             {

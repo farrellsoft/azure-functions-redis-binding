@@ -9,7 +9,35 @@ namespace Tests.Converters
 {
 	public class given_an_instance_of_RedisValueConverter_calling_GetDictionary
 	{
-		[Fact]
+        [Fact]
+        public async void validate_if_no_connection_name_is_passed_an_ArgumentNullException_is_thrown()
+        {
+            // arrange
+            var clientMock = new Mock<IClient>();
+            var configuration = MoqHelper.BuildConfiguration(new Dictionary<string, string>());
+            var converterMock = new Mock<IValueConverter>();
+            var converter = new RedisValueConverter(clientMock.Object, configuration, converterMock.Object);
+
+            // act
+            // assert
+            await Assert.ThrowsAsync<ArgumentNullException>(() => converter.GetDictionary<TestObject>(string.Empty, "someKey"));
+        }
+
+        [Fact]
+        public async void validate_if_the_given_connection_name_does_not_map_to_a_configuration_value_an_ArgumentException_is_thrown()
+        {
+            // arrange
+            var clientMock = new Mock<IClient>();
+            var configuration = MoqHelper.BuildConfiguration(new Dictionary<string, string>());
+            var converterMock = new Mock<IValueConverter>();
+            var converter = new RedisValueConverter(clientMock.Object, configuration, converterMock.Object);
+
+            // act
+            // assert
+            await Assert.ThrowsAsync<ArgumentException>(() => converter.GetDictionary<TestObject>("connectionName", "someKey"));
+        }
+
+        [Fact]
 		public async void validate_the_correct_number_of_values_are_returned_given_a_set_of_HashEntries()
 		{
 			// arrange

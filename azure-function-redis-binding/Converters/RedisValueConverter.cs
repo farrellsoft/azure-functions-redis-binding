@@ -62,7 +62,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Converters
             if (string.IsNullOrEmpty(stringValue))
                 return null;
 
-            return JsonConvert.DeserializeObject<TValue>(stringValue);
+            return _valueConverter.GetObjectFromString<TValue>(stringValue);
         }
 
         public async Task<string?> GetString(string connectionName, string key)

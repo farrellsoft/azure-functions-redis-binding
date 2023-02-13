@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Tests.Converters
 {
-	public class given_an_instance_of_RedisValueConverter_calling_GetList
+	public class given_an_instance_of_RedisValueConverter_calling_GetObject
     {
         [Fact]
         public async void validate_if_no_connection_name_is_passed_an_ArgumentNullException_is_thrown()
@@ -20,7 +20,7 @@ namespace Tests.Converters
 
             // act
             // assert
-            await Assert.ThrowsAsync<ArgumentNullException>(() => converter.GetList<TestObject>(string.Empty, "someKey"));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => converter.GetObject<TestObject>(string.Empty, "someKey"));
         }
 
         [Fact]
@@ -34,48 +34,44 @@ namespace Tests.Converters
 
             // act
             // assert
-            await Assert.ThrowsAsync<ArgumentException>(() => converter.GetList<TestObject>("connectionName", "someKey"));
+            await Assert.ThrowsAsync<ArgumentException>(() => converter.GetObject<TestObject>("connectionName", "someKey"));
         }
 
         [Fact]
-        public async void validate_the_correct_number_of_values_are_returned_given_a_set_of_RedisValue()
+        public async void validate_the_type_returned_by_GetObject_returns_an_object_of_the_requested_type()
         {
             // arrange
             var clientMock = new Mock<IClient>();
-            clientMock.Setup(x => x.GetValues(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new StackExchange.Redis.RedisValue[]
-                {
-                    new StackExchange.Redis.RedisValue("test"),
-                    new StackExchange.Redis.RedisValue("user")
-                });
+            clientMock.Setup(x => x.GetString(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync("{}");
             var configuration = MoqHelper.BuildConfiguration(new Dictionary<string, string>
             {
                 { "validConnectionName", "someConnectionString" }
             });
 
             var converterMock = new Mock<IValueConverter>();
+            converterMock.Setup(x => x.GetObjectFromString<TestObject>(It.IsAny<string>()))
+                .Returns(new TestObject { FirstName = "tester" });
+
             var converter = new RedisValueConverter(
                 clientMock.Object,
                 configuration,
                 converterMock.Object);
 
             // act
-            var result = await converter.GetList<string>("validConnectionName", "someKey");
+            var result = await converter.GetObject<TestObject>("validConnectionName", "someKey");
 
             // assert
-            Assert.Equal(2, result.Count);
+            Assert.Equal("tester", result.FirstName);
         }
 
         [Fact]
-        public async void validate_for_a_inner_type_of_string_no_call_to_GetObjectFromString_is_made()
+        public async void validate_null_is_returned_if_the_string_returned_by_client_is_empty()
         {
             // arrange
             var clientMock = new Mock<IClient>();
-            clientMock.Setup(x => x.GetValues(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new StackExchange.Redis.RedisValue[]
-                {
-                    new StackExchange.Redis.RedisValue("test")
-                });
+            clientMock.Setup(x => x.GetString(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(string.Empty);
             var configuration = MoqHelper.BuildConfiguration(new Dictionary<string, string>
             {
                 { "validConnectionName", "someConnectionString" }
@@ -88,51 +84,19 @@ namespace Tests.Converters
                 converterMock.Object);
 
             // act
-            var result = await converter.GetList<string>("validConnectionName", "someKey");
+            var result = await converter.GetObject<TestObject>("validConnectionName", "someKey");
 
             // assert
-            converterMock.Verify(x => x.GetObjectFromString<It.IsAnyType>(It.IsAny<string>()), Times.Never);
-        }
-
-        [Theory]
-        [InlineData(1)]
-        [InlineData(2)]
-        public async void validate_for_a_inner_type_is_a_class_the_right_number_of_calls_to_GetObjectFromString_are_made(int numberOfEntries)
-        {
-            // arrange
-            var entries = new StackExchange.Redis.RedisValue[numberOfEntries];
-            for (int i = 0; i < numberOfEntries; i++)
-            {
-                entries[i] = new StackExchange.Redis.RedisValue("{}");
-            }
-
-            var clientMock = new Mock<IClient>();
-            clientMock.Setup(x => x.GetValues(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(entries);
-            var configuration = MoqHelper.BuildConfiguration(new Dictionary<string, string>
-            {
-                { "validConnectionName", "someConnectionString" }
-            });
-
-            var converterMock = new Mock<IValueConverter>();
-            var converter = new RedisValueConverter(
-                clientMock.Object,
-                configuration,
-                converterMock.Object);
-
-            // act
-            var result = await converter.GetList<TestObject>("validConnectionName", "someKey");
-
-            // assert
-            converterMock.Verify(x => x.GetObjectFromString<It.IsAnyType>(It.IsAny<string>()), Times.Exactly(numberOfEntries));
+            Assert.Null(result);
         }
 
         [Fact]
-        public async void validate_one_call_to_GetList_on_client_is_made()
+        public async void validate_for_a_return_type_of_object_one_call_to_GetObjectFromString_is_made()
         {
+            // arrange
             var clientMock = new Mock<IClient>();
-            clientMock.Setup(x => x.GetValues(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new StackExchange.Redis.RedisValue[0]);
+            clientMock.Setup(x => x.GetString(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync("{}");
             var configuration = MoqHelper.BuildConfiguration(new Dictionary<string, string>
             {
                 { "validConnectionName", "someConnectionString" }
@@ -145,13 +109,38 @@ namespace Tests.Converters
                 converterMock.Object);
 
             // act
-            await converter.GetList<TestObject>("validConnectionName", "someKey");
+            var result = await converter.GetObject<TestObject>("validConnectionName", "someKey");
 
             // assert
-            clientMock.Verify(x => x.GetValues("someConnectionString", "someKey"), Times.Once);
+            converterMock.Verify(x => x.GetObjectFromString<TestObject>(It.IsAny<string>()), Times.Once);
         }
 
-        private class TestObject { }
+        [Fact]
+        public async void validate_one_call_to_GetString_on_client_is_made()
+        {
+            // arrange
+            var clientMock = new Mock<IClient>();
+            clientMock.Setup(x => x.GetString(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(string.Empty);
+            var configuration = MoqHelper.BuildConfiguration(new Dictionary<string, string>
+            {
+                { "validConnectionName", "someConnectionString" }
+            });
+
+            var converterMock = new Mock<IValueConverter>();
+            var converter = new RedisValueConverter(
+                clientMock.Object,
+                configuration,
+                converterMock.Object);
+
+            // act
+            await converter.GetObject<TestObject>("validConnectionName", "someKey");
+
+            // assert
+            clientMock.Verify(x => x.GetString("someConnectionString", "someKey"), Times.Once);
+        }
+
+        private class TestObject { public string FirstName { get; set; } }
     }
 }
 

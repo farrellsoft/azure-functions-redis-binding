@@ -44,6 +44,20 @@ namespace Tests.ValueProviders
 			converterMock.Verify(x => x.GetDictionary<TestObject>("someConnection", "someKey"), Times.Once);
         }
 
+		[Fact]
+		public void validate_the_ValueProvider_Type_property_returns_the_correct_type()
+		{
+            // arrange
+            var converterMock = new Mock<IRedisValueConverter>();
+            var provider = new RedisHashMapValueProvider<TestObject>("someConnection", "someKey", converterMock.Object);
+
+			// act
+			var type = provider.Type;
+
+			// assert
+			Assert.Equal(typeof(Dictionary<string, TestObject>), type);
+        }
+
         private class TestObject { }
 	}
 }

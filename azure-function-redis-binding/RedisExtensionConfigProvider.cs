@@ -1,4 +1,5 @@
 
+using System.Diagnostics.CodeAnalysis;
 using Farrellsoft.Azure.Functions.Extensions.Redis.Builders;
 using Farrellsoft.Azure.Functions.Extensions.Redis.Converters;
 using Microsoft.Azure.WebJobs.Description;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 namespace Farrellsoft.Azure.Functions.Extensions.Redis
 {
     [Extension("Redis")]
+    [ExcludeFromCodeCoverage]
     internal class RedisExtensionConfigProvider : IExtensionConfigProvider
     {
         private readonly IRedisValueConverter _valueConverter;

@@ -1,9 +1,11 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Azure.WebJobs.Description;
 
 namespace Farrellsoft.Azure.Functions.Extensions.Redis
 {
     [Binding]
+    [ExcludeFromCodeCoverage]
     public class RedisAttribute : Attribute
     {
         [AutoResolve]

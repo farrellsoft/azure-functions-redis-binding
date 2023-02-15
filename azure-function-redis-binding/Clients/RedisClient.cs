@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Common;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -7,7 +8,8 @@ using StackExchange.Redis;
 
 namespace Farrellsoft.Azure.Functions.Extensions.Redis.Clients
 {
-    public sealed class RedisClient : IClient
+    [ExcludeFromCodeCoverage]
+    internal sealed class RedisClient : IClient
     {
         public async Task<HashEntry[]> GetHashEntries(string connectionString, string key)
         {

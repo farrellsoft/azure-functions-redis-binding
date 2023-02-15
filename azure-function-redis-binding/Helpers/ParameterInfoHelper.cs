@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace Farrellsoft.Azure.Functions.Extensions.Redis.Helpers
 {
-	public class ParameterInfoHelper : IParameterInfoHelper
+    [ExcludeFromCodeCoverage]
+    public class ParameterInfoHelper : IParameterInfoHelper
 	{
 		public RedisAttribute GetRedisAttribute(ParameterInfo parameterInfo)
 		{

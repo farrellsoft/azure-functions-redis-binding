@@ -38,7 +38,7 @@ public class given_an_instance_of_RedisBindingProvider
         var result = await provider.TryCreateAsync(context);
 
         // assert
-        Assert.True(result is RedisItemBinding);
+        Assert.True(result is RedisItemBinding<string>);
     }
 
     [Fact]

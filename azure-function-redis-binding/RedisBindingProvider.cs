@@ -35,7 +35,12 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
                 if (parameterType != typeof(string) && parameterType.IsClass == false)
                     throw new NotSupportedException($"The type {parameterType.ToString()} is not supported for binding");
 
-                return Task.FromResult<IBinding>(new RedisItemBinding(attribute, _valueConverter, context.Parameter.ParameterType));
+                var providerType = typeof(RedisItemBinding<>);
+                var constructedProvider = providerType.MakeGenericType(new[] { parameterType });
+                return Task.FromResult<IBinding>((IBinding)Activator.CreateInstance(
+                    type: constructedProvider,
+                    attribute,
+                    _valueConverter));
             }
 
             // we are dealing with a destination type generic with one arg, it needs to be a list

@@ -8,28 +8,26 @@ using Newtonsoft.Json.Linq;
 
 namespace Farrellsoft.Azure.Functions.Extensions.Redis.Bindings
 {
-	public class RedisItemBinding : IBinding
+	public class RedisItemBinding<TValue> : IBinding
 	{
         private readonly RedisAttribute _attribute;
         private readonly IRedisValueConverter _valueConverter;
-        private readonly Type _targetType;
 
-		public RedisItemBinding(RedisAttribute attribute, IRedisValueConverter valueConverter, Type targetType)
+		public RedisItemBinding(RedisAttribute attribute, IRedisValueConverter valueConverter)
 		{
             _attribute = attribute;
             _valueConverter = valueConverter;
-            _targetType = targetType;
 		}
 
         public bool FromAttribute => false;
 
         public Task<IValueProvider> BindAsync(BindingContext context)
         {
-            if (_targetType == typeof(string))
+            if (typeof(TValue) == typeof(string))
                 return Task.FromResult<IValueProvider>(new RedisStringValueProvider(_attribute.Connection, _attribute.Key, _valueConverter));
 
             var providerType = typeof(RedisObjectValueProvider<>);
-            var constructedProvider = providerType.MakeGenericType(new[] { _targetType });
+            var constructedProvider = providerType.MakeGenericType(new[] { typeof(TValue) });
             return Task.FromResult<IValueProvider>((IValueProvider)Activator.CreateInstance(
                 type: constructedProvider,
                 _attribute.Connection,

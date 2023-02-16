@@ -51,6 +51,9 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
                     throw new NotSupportedException($"You may only use List<T> as the destination type when binding a single generic type");
 
                 // todo: validate the inner argument is a string or object
+                var innerType = parameterType.GetGenericArguments()[0];
+                if (innerType != typeof(string) && innerType.IsClass == false)
+                    throw new NotSupportedException("Inner type of List<T> must be a string or an object");
 
                 var providerType = typeof(RedisListBinding<>);
                 var constructedProvider = providerType.MakeGenericType(new[] { genericArgs[0] });
@@ -66,7 +69,13 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis
                 if (parameterType.GetGenericTypeDefinition() != typeof(Dictionary<,>))
                     throw new NotSupportedException($"You may only use Dictionary<TKey, TValue> when being a two generic type");
 
-                // todo: validate inner type is Object or string
+                var innerTypeKey = parameterType.GetGenericArguments()[0];
+                if (innerTypeKey != typeof(string))
+                    throw new NotSupportedException("Inner Key type of Dictionary<TKey, TValues> must be a string");
+
+                var innerTypeValue = parameterType.GetGenericArguments()[1];
+                if (innerTypeValue != typeof(string) && innerTypeValue.IsClass == false)
+                    throw new NotSupportedException("Inner Value type of Dictionary<TKey, TValues> must be a string or an object");
 
                 var providerType = typeof(RedisHashMapBinding<>);
                 var constructedProvider = providerType.MakeGenericType(new[] { genericArgs[1] });

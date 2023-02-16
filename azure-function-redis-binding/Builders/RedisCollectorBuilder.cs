@@ -4,7 +4,7 @@ using StackExchange.Redis;
 
 namespace Farrellsoft.Azure.Functions.Extensions.Redis.Builders
 {
-    internal class RedisCollectorBuilder<TValue> : IConverter<RedisAttribute, IAsyncCollector<TValue>>
+    public class RedisCollectorBuilder<TValue> : IConverter<RedisAttribute, IAsyncCollector<TValue>>
     {
         public IAsyncCollector<TValue> Convert(RedisAttribute input)
         {
@@ -12,7 +12,7 @@ namespace Farrellsoft.Azure.Functions.Extensions.Redis.Builders
         }
     }
 
-    internal class RedisItemAsyncCollector<TValue> : IAsyncCollector<TValue>
+    public class RedisItemAsyncCollector<TValue> : IAsyncCollector<TValue>
     {
         private readonly string _key;
         private readonly string _connection;

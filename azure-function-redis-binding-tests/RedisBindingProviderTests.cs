@@ -179,4 +179,73 @@ public class given_an_instance_of_RedisBindingProvider
         // assert
         await Assert.ThrowsAsync<NotSupportedException>(async () => await provider.TryCreateAsync(context));
     }
+
+    [Fact]
+    public async void validate_if_a_non_object_or_string_is_given_as_the_list_inner_type_parameter_throws_NotSupportedException()
+    {
+        // arrange
+        var paramInfoHelperMock = new Mock<IParameterInfoHelper>();
+        paramInfoHelperMock.Setup(x => x.GetGenericTypeArgs(It.IsAny<ParameterInfo>()))
+            .Returns(new Type[] { typeof(int) });
+        paramInfoHelperMock.Setup(x => x.GetParameterType(It.IsAny<ParameterInfo>()))
+            .Returns(typeof(List<int>));
+
+        var provider = new RedisBindingProvider(new Mock<IRedisValueConverter>().Object, paramInfoHelperMock.Object);
+
+        var paramInfoMock = new Mock<ParameterInfo>();
+        var context = new BindingProviderContext(
+            parameter: paramInfoMock.Object,
+            bindingDataContract: new ReadOnlyDictionary<string, Type>(new Dictionary<string, Type>()),
+            cancellationToken: new System.Threading.CancellationToken());
+
+        // act
+        // assert
+        await Assert.ThrowsAsync<NotSupportedException>(async () => await provider.TryCreateAsync(context));
+    }
+
+    [Fact]
+    public async void validate_if_non_string_is_given_as_the_key_generic_to_dictionary_a_NotSupportedException_is_thrown()
+    {
+        // arrange
+        var paramInfoHelperMock = new Mock<IParameterInfoHelper>();
+        paramInfoHelperMock.Setup(x => x.GetGenericTypeArgs(It.IsAny<ParameterInfo>()))
+            .Returns(new Type[] { typeof(int), typeof(string) });
+        paramInfoHelperMock.Setup(x => x.GetParameterType(It.IsAny<ParameterInfo>()))
+            .Returns(typeof(Dictionary<int, string>));
+
+        var provider = new RedisBindingProvider(new Mock<IRedisValueConverter>().Object, paramInfoHelperMock.Object);
+
+        var paramInfoMock = new Mock<ParameterInfo>();
+        var context = new BindingProviderContext(
+            parameter: paramInfoMock.Object,
+            bindingDataContract: new ReadOnlyDictionary<string, Type>(new Dictionary<string, Type>()),
+            cancellationToken: new System.Threading.CancellationToken());
+
+        // act
+        // assert
+        await Assert.ThrowsAsync<NotSupportedException>(async () => await provider.TryCreateAsync(context));
+    }
+
+    [Fact]
+    public async void validate_if_non_object_or_string_is_given_as_the_value_generic_to_dictionary_a_NotSupportedException_is_thrown()
+    {
+        // arrange
+        var paramInfoHelperMock = new Mock<IParameterInfoHelper>();
+        paramInfoHelperMock.Setup(x => x.GetGenericTypeArgs(It.IsAny<ParameterInfo>()))
+            .Returns(new Type[] { typeof(string), typeof(int) });
+        paramInfoHelperMock.Setup(x => x.GetParameterType(It.IsAny<ParameterInfo>()))
+            .Returns(typeof(Dictionary<string, int>));
+
+        var provider = new RedisBindingProvider(new Mock<IRedisValueConverter>().Object, paramInfoHelperMock.Object);
+
+        var paramInfoMock = new Mock<ParameterInfo>();
+        var context = new BindingProviderContext(
+            parameter: paramInfoMock.Object,
+            bindingDataContract: new ReadOnlyDictionary<string, Type>(new Dictionary<string, Type>()),
+            cancellationToken: new System.Threading.CancellationToken());
+
+        // act
+        // assert
+        await Assert.ThrowsAsync<NotSupportedException>(async () => await provider.TryCreateAsync(context));
+    }
 }

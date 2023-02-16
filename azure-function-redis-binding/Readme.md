@@ -5,17 +5,12 @@ Bind your functions to data in Redis in either a read mode or a write mode, for 
 Built on .NET 6 (LTS) and leveraging Newtonsoft Json.NET internally.
 Include the package **Farrellsoft.Azure.Functions.Extensions.Redis**
 
-#### Limitations
-Right now the attribute is limited to working with the Redis string value and Redis list values types. Hash support is planned for the future.
-
-Specifying Time To Live for values is not currently supported, this will be supported in the near future.
-
 ## Reading Values
 
 #### Single Value Read
 Use the **Redis** attribute targeting a specific key to read the value out of your Redis instance.
 
-##### Code Example: Read a string
+##### Code Example: Read a value (string or object)
 ```
 using Farrellsoft.Azure.Functions.Extensions.Redis;
 ...
@@ -25,21 +20,10 @@ public static async Task<IActionResult> Run(
 }
 ```
 
-##### Code Example: Read a object
-You can read typed objects from Redis IF the underlying data is stored in JSON. It will be deserialized using Json.NET
-```
-using Farrellsoft.Azure.Functions.Extensions.Redis;
-...
-public static async Task<IActionResult> Run(
-  [Redis(key: "object", Connection = "RedisConnectionString")] Person person)
-{
-}
-```
-
-#### List Value Read
+#### List Read
 Redis lists are supported for either strings or objects represented by JSON strings
 
-##### Code Example: Read a list of strings
+##### Code Example: Read a list of strings (or objects)
 ```
 using Farrellsoft.Azure.Functions.Extensions.Redis;
 ...
@@ -49,13 +33,12 @@ public static async Task<IActionResult> Run(
 }
 ```
 
-##### Code Example: Read a list of objects
-As was the case with reading an single object out of Redis, individual items need to be JSON strings which can be deserialized by Json.NET
+#### HashMap Read (Key must be a string, Value can be string or object)
 ```
 using Farrellsoft.Azure.Functions.Extensions.Redis;
 ...
 public static async Task<IActionResult> Run(
-  [Redis(key: "objects", Connection = "RedisConnectionString")] List<Person> people)
+  [Redis(key: "values", Connection = "RedisConnectionString")] Dictionary<string, string> valueMap)
 {
 }
 ```
